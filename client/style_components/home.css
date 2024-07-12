@@ -1,0 +1,309 @@
+body {
+    font-family: Arial, Verdana, Tahoma, sans-serif;
+	color: #000000;
+	background-color: #ffffff;
+}
+
+a, a:hover {
+	text-decoration: none;
+	color: #000000;
+}
+
+button {
+	background-color: transparent;
+}
+
+h4 {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.left-menu {
+	height: 100vh;
+	overflow-y: auto;
+}
+
+@media(min-width: 1601px) {
+	.main-container {
+		margin-left: 10%; 
+		margin-right: 10%;
+	}
+    .left-menu {
+		padding-right: 90%;
+		width: 110%;
+	}
+	.right-container {
+		padding-right: 9%;
+	}
+}
+
+@media(max-width: 1600px) {
+	.main-container {
+		margin-left: 0%; 
+		margin-right: 0%;
+	}
+    .left-menu {
+		padding-right: 80%;
+	}
+	.right-container {
+		padding-right: 4%;
+	}
+}
+
+@media(max-width: 768px) {
+    .left-menu-text {
+        font-size: 24px;
+    }
+	.left-profile-text {
+		font-size: 18px;
+	}
+    .left-menu {
+        position: relative;
+		padding-left: 0px;
+		padding-right: 0px;
+		height: auto;
+		overflow-y: hidden;
+		overflow: hidden;
+    }
+}
+
+@media(min-width: 769px) {
+    .left-menu-text {
+        font-size: 0px;
+    }
+	.left-profile-text {
+		font-size: 12px;
+	}
+    .left-menu {
+		position: fixed;
+		padding-left: 6%;
+	}
+}
+
+@media(min-width: 1200px) {
+    .left-menu-text {
+		font-size: 24px;
+	}
+	.left-profile-text {
+		font-size: 18px;
+	}
+}
+
+.left-menu > button {
+	margin-right: 100%;
+	margin-top: 8px;
+	font-size: 24px;
+	border-radius: 30px;
+	padding-right: 20px;
+}
+
+.left-menu > button:hover {
+	background-color: #dddddd;
+	transition-duration: 0.5s;
+}
+
+.left-menu > button > .glyphicon {
+	margin-right: 15px;
+}
+
+.left-post-btn {
+	background-color: #00ffcc;
+	width: 100%;
+	text-align: center;
+}
+
+.left-profile-text {
+	padding-top: 10px;
+}
+
+.center-scroller {
+	width: 100%;
+	max-width: 800px;
+	margin: auto;
+	padding-left: 5px;
+}
+
+.center-buttons {
+	margin: auto;
+	border-width: 1px;
+	border-left-style: solid;
+	border-right-style: solid;
+	border-color: #eeeeee;
+	display: flex;
+}
+
+.center-buttons > button {
+	font-size: 14px;
+	font-weight: bold;
+	height: 50px;
+	text-align: center;
+	width: 100%;
+	display: inline;
+	margin: 0px;
+	border-width: 0px;
+	background-color: #ffffff;
+}
+
+.center-buttons > button:hover {
+	background-color: #dddddd;
+	transition-duration: 0.5s;
+}
+
+.make-post {
+	border-width: 1px;
+	border-style: solid;
+	border-bottom-style: none;
+	border-color: #eeeeee;
+	font-size: 24px;
+	padding: 15px;
+	display: flex;
+}
+
+.make-post > img {
+	height: 42px;
+	width: 42px;
+	border-radius: 50%;
+}
+
+.make-post > form {
+	width: 100%;
+	padding-right: 20px;
+}
+
+.post-options {
+	display: flex;
+}
+
+#post-file-input {
+	margin-top: 10px;
+	float: right;
+	color: #000000;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.make-post > form > textarea {
+	resize: none;
+	height: 80px;
+	margin-left: 10px;
+	border-style: none;
+	width: 100%;
+	font-size: 24px;
+}
+
+.make-post-btn {
+	margin-top: 10px;
+	margin-left: auto;
+	float: right;
+	background-color: #00ffcc;
+	color: #000000;
+	font-size: 18px;
+	border-radius: 30px;
+	font-weight: bold;
+}
+
+.reload-posts {
+}
+
+.post-feed {
+	width: 100%;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #eeeeee;
+	font-size: 14px;
+}
+
+.post {
+	padding: 10px;
+	border-width: 1px;
+	border-bottom-style: solid;
+	border-color: #eeeeee;
+}
+
+.post-body > img {
+	width: 100%; 
+	border-radius: 5%;
+}
+
+.post-profile {
+	display: flex;
+	padding: 5px;
+}
+
+.post-profile > img {
+	width: 42px;
+	height: 42px;
+	border-radius: 50%;
+	margin-right: 10px;
+}
+
+.post-profile > b {
+	font-size: 18px;
+}
+
+.post-profile > p {
+	margin-top: 3px;
+	margin-left: 10px;
+	color: #595959;
+}
+
+.post-body {
+	padding-left: 30px; 
+	padding-right: 30px;
+	padding-bottom: 10px;
+}
+
+
+.right-menu {
+	width: 100%;
+	padding: 5px;
+}
+
+.search-bar > form {
+	border-radius: 30px;
+}
+
+.right-notice, .right-highlights, .right-follows {
+	padding: 15px;
+	padding-top: 4px;
+	margin-top: 15px;
+	width: 100%;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #eeeeee;
+	border-radius: 15px;
+}
+
+.right-notice > button {
+	background-color: #000000;
+	color: #ffffff;
+	font-size: 14px;
+	border-radius: 30px;
+	font-weight: bold;
+}
+
+.right-highlights {
+	height: 440px;
+}
+
+.right-follows {
+	height: 250px;
+}
+
+.right-profile > p {
+	color: #595959;
+}
+
+.right-follows > .post-profile > button {
+	background-color: #000000;
+	color: #ffffff;
+	font-size: 14px;
+	border-radius: 30px;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top: 6px;
+	height: 34px;
+	font-weight: bold;
+	margin-left: auto;
+}
+
