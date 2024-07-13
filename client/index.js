@@ -1,7 +1,7 @@
 
 const express = require('express')
 const app = express()
-app.set('port', 80)
+app.set('port', 81)
 
 //app.use(express.static(__dirname + '/app'))
 app.use(express.static(__dirname))

@@ -65,6 +65,9 @@ h4 {
 		overflow-y: hidden;
 		overflow: hidden;
     }
+	.right-container {
+		display: none;
+	}
 }
 
 @media(min-width: 769px) {
@@ -77,6 +80,7 @@ h4 {
     .left-menu {
 		position: fixed;
 		padding-left: 6%;
+		width: 102vw;
 	}
 }
 
@@ -97,7 +101,7 @@ h4 {
 	padding-right: 20px;
 }
 
-.left-menu > button:hover {
+.left-btn:hover {
 	background-color: #dddddd;
 	transition-duration: 0.5s;
 }
@@ -203,6 +207,7 @@ h4 {
 }
 
 .reload-posts {
+	display: none;
 }
 
 .post-feed {
@@ -252,7 +257,6 @@ h4 {
 	padding-right: 30px;
 	padding-bottom: 10px;
 }
-
 
 .right-menu {
 	width: 100%;
