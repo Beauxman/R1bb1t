@@ -60,7 +60,7 @@ body {
 	transition-duration: 0.5s;
 }
 
-.login-btn {
+#login-btn {
 	margin-top: 8px;
 	margin-left: 70px;
 	text-align: center;
@@ -74,13 +74,13 @@ body {
 	color: #00ffcc;
 }
 
-.login-btn:hover {
+#login-btn:hover {
 	background-color: #99ffeb;
 	color: #00997a;
 	transition-duration: 0.5s;
 }
 
-.login-btn:active {
+#login-btn:active {
 	color: #00997a;
 }
 
@@ -116,12 +116,12 @@ body {
 	color: #ffffff;
 }
 
-.register-form {
+.register-form, .login-form {
 	padding-left: 60px;
 	padding-right: 60px;
 }
 
-.register-form > form > input {
+.register-form > form > input, .login-form > form > input {
 	font-family: Arial, Verdana, Tahoma, sans-serif;
 	font-weight: bold;
 	height: 60px;
