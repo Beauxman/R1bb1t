@@ -9,3 +9,10 @@ CREATE TABLE users (
     description varchar(255),
     photo varchar(255)
 );
+
+CREATE TABLE posts (
+    id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	poster int NOT NULL,
+	content varchar(255),
+	datetime DATETIME
+);
