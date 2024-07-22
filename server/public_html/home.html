@@ -4,12 +4,14 @@
 		<title>R1bb1t | Home</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="icon" type="image" href="client_art/favicon.ico">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 		<link rel="stylesheet" href="style_components/home.css" type="text/css">
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Sora:wght@700&display=swap" rel="stylesheet">
 		<script src="js_libraries/jquery-3.7.1.min.js"></script>
+		<script src="js_libraries/moment-2.30.1.min.js"></script>
 	</head>
 	<body>
 		<div class="container-global">
@@ -18,7 +20,7 @@
 					<div class="row">
 						<div class="col-sm-3" >
 							<div class="left-menu">
-								<h1 style="font-family: Sora;">R1bb1t</h1>
+								<div style="display: flex;"><h1 style="font-family: Sora;">R1bb1t</h1><img src="client_art/logo.png" style="width: 32px; height: 32px; margin-left: 16px; margin-top: 20px;"></div>
 								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-home"></span><span class="left-menu-text">Home</span></button>
 								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-search"></span><span class="left-menu-text">Explore</span></button>
 								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-bell"></span><span class="left-menu-text">Notifications</span></button>
@@ -31,7 +33,7 @@
 								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-education"></span><span class="left-menu-text">Verified Orgs</span></button>
 								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-user"></span><span class="left-menu-text">Profile</span></button>
 								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-option-horizontal"></span><span class="left-menu-text">More</span></button>
-								<button type="button" class="btn left-post-btn" style="padding-right: 0px; font-weight: bold;">Post</button>
+								<button type="button" class="btn left-post-btn" style="padding-right: 0px; font-weight: bold;" id="test">Post</button>
 								<div class="post-profile" style="margin-top: 60px;">
 									<img src="profile.jpg" style="width: 64px; height: 64px;">
 									<div class="right-profile left-profile-text">
@@ -59,8 +61,8 @@
 								</div>
 								<div class="reload-posts">
 								</div>
-								<div class="post-feed">
-									<div class="post">
+								<div id="post-feed">
+									<!--<div class="post">
 										<div class="post-profile">
 											<img src="profile.jpg">
 											<b>Andrew</b>
@@ -79,14 +81,14 @@
 										<div class="post-body">
 											<img src="img1.jpg" style="width: 100%; border-radius: 5%;">
 										</div>
-									</div>
+									</div>-->
 								</div>
 							</div>
 						</div>
 						<div class="col-sm-4 right-container">
 							<div class="right-menu">
 								<form class="search-bar">
-									<span class="glyphicon glyphicon-search">
+									<span class="glyphicon glyphicon-search"></span>
 									<input class="form-control me-2" type="text" placeholder="Search">
 								</form>
 							</div>

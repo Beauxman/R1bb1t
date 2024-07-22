@@ -3,27 +3,35 @@ const session = require("express-session");
 const cors = require('cors');
 const mysql = require('mysql');
 const bcrypt = require('bcrypt');
-
-const { v4: uuidv4 } = require('uuid');
+const {v4: uuidv4} = require('uuid');
 const crypto = require('crypto');
 const dotenv = require('dotenv').config()
-
 const https = require("https");
 const http = require("http");
 const path = require("path");
 const fs = require("fs");
+
+// ------------------------- CONFIG -----------------------------
 
 const db_host = "127.0.0.1";
 const db_user = "root";
 const db_password = "";
 const db_name = "r1bb1t";
 
+const key_store = 'C:/Users/Andrew/Desktop/r1bb1t/keys';
+
+// --------------------------------------------------------------
+
+const port = 80;
 const password_salt = 10;
+const session_length = 600000; //60000;
+const generate_session_key = false; //true
 
-const session_length = 60000;
-const generate_secret = true;
+const options = {
+  key: fs.readFileSync(key_store + '/key.pem'),
+  cert: fs.readFileSync(key_store + '/cert.pem'),
+};
 
-const app = express()
 const con = mysql.createConnection({
 	host: db_host,
 	user: db_user,
@@ -31,10 +39,20 @@ const con = mysql.createConnection({
 	database: db_name
 });
 
+const app = express()
 app.use(express.static(__dirname + '/public_html'))
 app.use(express.json())
 app.use(cors())
-app.set('port', 80)
+app.set('port', port)
+
+app.enable('trust proxy');
+app.use((req, res, next) => {
+    if (req.secure) {
+        next();
+    } else {
+        res.redirect('https://' + req.headers.host + req.url);
+    }
+});
 
 app.use(session( {
 	genid: function(req) {
@@ -44,17 +62,19 @@ app.use(session( {
 	secret: process.env.SESSION_SECRET,
 	resave: true,
 	saveUninitialized: true,
-	cookie: { sameSite: 'strict', secure: false, expires: session_length }
+	cookie: { sameSite: 'strict', secure: true, expires: session_length }
 }));
+
+//--------------------------------------------------------------- PAGE HANDLING ---------------------------------------------------------------//
 
 app.get('/', (req, res)=>{ 
 	res.send();
 }); 
-
+/*
 app.get('/app.js', (req, res)=>{ 
 	res.send('<script>window.location.replace("/")</script>');
 }); 
-
+*/
 app.get('/session', (req, res)=>{
 	if (req.session.email != null) {
 		res.send(req.session.email);
@@ -79,11 +99,16 @@ app.get('/home',(req,res) => {
 	}
 });
 
+//--------------------------------------------------------------- API CALLS ---------------------------------------------------------------//
+
 app.post('/api/accounts', function(req, res){
 	console.log("Account creation request received.");
 
 	var r_email = req.body.email;
 	var r_password = req.body.password;
+	var r_name = req.body.name;
+	var r_birthday = req.body.birthday;
+	var r_handle = req.body.handle;
 	
 	res.type('application/json');
 	bcrypt.genSalt(password_salt, (err, salt) => {
@@ -101,7 +126,7 @@ app.post('/api/accounts', function(req, res){
 				return;
 			}
 			
-			var sql = "INSERT INTO users (email, password) VALUES ('" + r_email + "', '" + hash + "')";
+			var sql = "INSERT INTO users (email, password, name, birthday, handle) VALUES ('" + r_email + "', '" + hash + "', '" + r_name + "', '" + r_birthday + "', '" + r_handle + "')";
 			con.query(sql, function (err, result) {
 				if (err) throw err;
 				console.log("Record inserted.");
@@ -112,7 +137,7 @@ app.post('/api/accounts', function(req, res){
 	})
 })
 
-app.post('/api/accounts/authenticate', function(req, res){
+app.post('/api/accounts/authenticate', function(req, res) {
 	var l_email = req.body.email;
 	var l_password = req.body.password;
 	
@@ -147,34 +172,55 @@ app.post('/api/accounts/authenticate', function(req, res){
 	})
 })
 
-app.post('/api/posts', function(req, res){
-	console.log("Account creation request received.");
+app.post('/api/accounts/namecheck', function(req, res) {
+	var t_handle = req.body.handle;
 
+	res.type('application/json');
+	var sql = "SELECT id FROM users WHERE handle= '" + t_handle + "'";
+	con.query(sql, function (err, q_result) {
+		if (err) throw err;
+		if (q_result.length >= 1) {
+			res.status(401);
+			res.send(null);
+		} else {
+			res.status(200);
+			res.send(null);
+		}
+	})
+})
+
+app.post('/api/posts', function(req, res) {
 	var r_email = req.body.email;
 	var r_content = req.body.content;
 	
 	var sql = "SELECT id FROM users WHERE email = '" + r_email + "'";
 	con.query(sql, function (err, q_result) {
 		if (err) throw err;
-		if (q_result.length == 1) {
-			var user_id = q_result[0].id
-	
-			var sql = "INSERT INTO posts (poster, content) VALUES ('" + user_id + "', '" + r_content + "')";
-			con.query(sql, function (err, result) {
-				if (err) throw err;
-				console.log("New post created.");
-				res.status(200);
-				res.json(result);
-			})
-		}
+		var sql = "INSERT INTO posts (poster, content) VALUES ('" + q_result[0].id + "', '" + r_content + "')";
+		con.query(sql, function (err, result) {
+			if (err) throw err;
+			res.status(200);
+			res.json(result);
+		})
 	})
 })
 
-app.listen(app.get('port'), function(){
+app.get('/api/posts', function(req, res) {
+	var sql = "SELECT users.name, users.handle, posts.created, posts.content FROM users INNER JOIN posts ON users.id=posts.poster;";
+	con.query(sql, function (err, q_result) {
+		if (err) throw err;
+		res.status(200);
+		res.send(q_result)
+	})
+})
+
+//--------------------------------------------------------------- APP ---------------------------------------------------------------//
+
+function main() {
 	console.log('Starting r1bb1t page server on http://localhost:' + app.get('port'));
 	console.log(__dirname)
-	
-	if (generate_secret) {
+
+	if (generate_session_key) {
 		const secret = crypto.randomBytes(48, function(err, buffer) { 
 			var token = buffer.toString('hex'); 
 			var content = "SESSION_SECRET=" + token;
@@ -187,9 +233,14 @@ app.listen(app.get('port'), function(){
 			});
 		});
 	}
-	
+
 	con.connect(function(err) {
 		if (err) throw err;
-		console.log("Conntected to SQL server @" + db_host);
+		console.log("Conntected to SQL server.");
 	});
-})
+
+	http.createServer(app).listen(80);
+	https.createServer(options, app).listen(443);
+}
+
+main();

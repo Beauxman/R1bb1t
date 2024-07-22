@@ -112,7 +112,27 @@ body {
 	border-radius: 15px;
 }
 
+#menu-header {
+	font-size: 40px;
+	position: absolute;
+	z-index: 3;
+	-margin-left: 13.5%;
+	margin-left: 260px;
+}
+
+@media(max-width: 600px) {
+	#menu-header {
+		margin-left: 45%;
+	}
+}
+
 #exit-menu {
+	background-color: #000000;
+	color: #ffffff;
+}
+
+#back-menu {
+	display: none;
 	background-color: #000000;
 	color: #ffffff;
 }
@@ -122,9 +142,18 @@ body {
 	padding-right: 60px;
 }
 
-.register-form > form > input, .login-form > form > input {
+.form-input {
 	font-family: Arial, Verdana, Tahoma, sans-serif;
 	font-weight: bold;
+	height: 60px;
+	margin-top: 30px;
+}
+
+label {
+	font-size: 24px;
+	font-family: Arial, Verdana, Tahoma, sans-serif;
+	font-weight: normal;
+	color: gray;
 	height: 60px;
 	margin-top: 30px;
 }
