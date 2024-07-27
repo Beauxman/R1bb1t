@@ -1,0 +1,19 @@
+
+input {
+	font-size: 18px !important;
+	color: #1a1a1a !important;
+}
+
+input:focus, textarea:focus {
+	border-color: #00ffcc !important;
+	border-width: 3px !important;
+	border-style: solid !important;
+}
+
+input::placeholder, textarea::placeholder {
+	color: #4d4d4d !important;
+}
+
+textarea::placeholder {
+	font-family: Sora, Arial, Verdana;
+}

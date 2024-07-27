@@ -4,8 +4,12 @@
 		<title>R1bb1t | Home</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="Connect with your friends and the whole world with this R1bb1t! This is a social media app for everyone. Make the leap!">
+		<meta name="keywords" content="r1bb1t, ribbit, social, social media, post, connect, friends, like, comment, share">
+		<meta name="author" content="Andrew Bowman">
 		<link rel="icon" type="image" href="client_art/favicon.ico">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="style_components/global.css" type="text/css">
 		<link rel="stylesheet" href="style_components/home.css" type="text/css">
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +24,7 @@
 					<div class="row">
 						<div class="col-sm-3" >
 							<div class="left-menu">
-								<div style="display: flex;"><h1 style="font-family: Sora;">R1bb1t</h1><img src="client_art/logo.png" style="width: 32px; height: 32px; margin-left: 16px; margin-top: 20px;"></div>
+								<div style="display: flex;"><h1 style="font-family: Sora;">R1bb1t</h1><img src="client_art/logo.png" id="logo" style="width: 32px; height: 32px; margin-left: 16px; margin-top: 20px;"></div>
 								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-home"></span><span class="left-menu-text">Home</span></button>
 								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-search"></span><span class="left-menu-text">Explore</span></button>
 								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-bell"></span><span class="left-menu-text">Notifications</span></button>
@@ -28,29 +32,29 @@
 								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-cloud"></span><span class="left-menu-text">AI</span></button>
 								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-list-alt"></span><span class="left-menu-text">Lists</span></button>
 								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-bookmark"></span><span class="left-menu-text">Bookmarks</span></button>
-								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-tree-deciduous"></span><span class="left-menu-text">Communities</span></button>
+								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-tree-deciduous"></span><span class="left-menu-text">Support</span></button>
 								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-star-empty"></span><span class="left-menu-text">Premium</span></button>
-								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-education"></span><span class="left-menu-text">Verified Orgs</span></button>
+								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-education"></span><span class="left-menu-text">About</span></button>
 								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-user"></span><span class="left-menu-text">Profile</span></button>
 								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-option-horizontal"></span><span class="left-menu-text">More</span></button>
 								<button type="button" class="btn left-post-btn" style="padding-right: 0px; font-weight: bold;" id="test">Post</button>
 								<div class="post-profile" style="margin-top: 60px;">
-									<img src="profile.jpg" style="width: 64px; height: 64px;">
+									<img src="" id="my-profile-icon-1" style="width: 64px; height: 64px; object-fit: cover;">
 									<div class="right-profile left-profile-text">
-										<b>Andrew</b>
-										<p>@beauxman</p>
+										<b id="my-profile-name"></b>
+										<p id="my-profile-handle"></p>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="col-sm-5">
-							<div class="center-scroller">
+							<div class="center-scroller" id="center-screen-1" style="-display: none;">
 								<div class="center-buttons">
 									<button type="button" class="btn" style="border-bottom-width: 4px; border-color: #00ffcc;">For you</button>
 									<button type="button" class="btn">Following</button>
 								</div>
 								<div class="make-post">
-									<img src="profile.jpg">
+									<img src="" id="my-profile-icon-2" style="object-fit: cover;">
 									<form id="p_form" onsubmit="return false">
 										<textarea class="form-control" id="make-post-content" placeholder="What is hopping?!" rows="3"></textarea>
 										<div class="post-options">
@@ -62,6 +66,21 @@
 								<div class="reload-posts">
 								</div>
 								<div id="post-feed">
+									<div class="post" data-post-id="0">
+										<div class="post-profile">
+											<img src="profile.jpg">
+											<b>Andrew</b>
+											<p>@beauxman - 5h</p>
+										</div>
+										<div class="post-body">
+											<p>Testing. Hi!</p>
+										</div>
+										<div class="post-actions">
+											<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-comment"></span><span class="post-action-text">0</span></button>
+											<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-retweet"></span><span class="post-action-text">0</span></button>
+											<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-heart"></span><span class="post-action-text">0</span></button>
+										</div>
+									</div>
 									<!--<div class="post">
 										<div class="post-profile">
 											<img src="profile.jpg">
@@ -84,11 +103,23 @@
 									</div>-->
 								</div>
 							</div>
+							<div class="center-scroller" id="center-screen-2" style="display: none;">
+								<div id="post-view">
+									<div class="post-view-title">
+										<button type="button" class="btn left-btn" id="button-back-2" style="border-radius: 20px; font-size: 24px;"><span class="glyphicon glyphicon-arrow-left"></span></button>
+										<span style="margin-left: 10px">Post</span>
+									</div>
+									<div id="post-view-container">
+									</div>
+									<div id="post-view-comments">
+									</div>
+								</div>
+							</div>
 						</div>
 						<div class="col-sm-4 right-container">
 							<div class="right-menu">
 								<form class="search-bar">
-									<span class="glyphicon glyphicon-search"></span>
+									<!--<span class="glyphicon glyphicon-search"></span>--><br>
 									<input class="form-control me-2" type="text" placeholder="Search">
 								</form>
 							</div>
@@ -133,6 +164,7 @@
 			</div>
 		</div>
 		<script src="control_components/session_interface.js"></script>
+		<script src="control_components/page_logic.js"></script>
 		<script src="control_components/post_interface.js"></script>
 	</body>
 </html>

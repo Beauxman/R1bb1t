@@ -1,7 +1,7 @@
 const express = require('express')
 const session = require("express-session");
 const cors = require('cors');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 const {v4: uuidv4} = require('uuid');
 const crypto = require('crypto');
@@ -10,8 +10,9 @@ const https = require("https");
 const http = require("http");
 const path = require("path");
 const fs = require("fs");
+const multer = require('multer')
 
-// ------------------------- CONFIG -----------------------------
+//---------------------------------------------------------------- CONFIG --------------------------------------------------------------------//
 
 const db_host = "127.0.0.1";
 const db_user = "root";
@@ -20,12 +21,13 @@ const db_name = "r1bb1t";
 
 const key_store = 'C:/Users/Andrew/Desktop/r1bb1t/keys';
 
-// --------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------------//
 
-const port = 80;
 const password_salt = 10;
-const session_length = 600000; //60000;
-const generate_session_key = false; //true
+const session_length = (60 * 60 * 1000);
+const generate_session_key = true;
+const max_img_size_mb = 6;
+
 
 const options = {
   key: fs.readFileSync(key_store + '/key.pem'),
@@ -41,9 +43,46 @@ const con = mysql.createConnection({
 
 const app = express()
 app.use(express.static(__dirname + '/public_html'))
+app.use(express.static(__dirname + '/image_store'))
 app.use(express.json())
 app.use(cors())
-app.set('port', port)
+app.set('port', 80)
+
+//-------------------------------------------------------------- IMAGE UPLOADS ---------------------------------------------------------------//
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "image_store");
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + "-" + Date.now() + ".jpg");
+    },
+});
+ 
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: (max_img_size_mb * 1000 * 1000) },
+    fileFilter: function (req, file, cb) {
+        var filetypes = /jpeg|jpg|png/;
+        var mimetype = filetypes.test(file.mimetype);
+ 
+        var extname = filetypes.test(
+            path.extname(file.originalname).toLowerCase()
+        );
+ 
+        if (mimetype && extname) {
+            return cb(null, true);
+        }
+ 
+        cb(
+            "Error: File upload only supports the " +
+                "following filetypes - " +
+                filetypes
+        );
+    },
+})
+
+// --------------------------------------------------------------------------------------------------------------------------------------------//
 
 app.enable('trust proxy');
 app.use((req, res, next) => {
@@ -65,17 +104,24 @@ app.use(session( {
 	cookie: { sameSite: 'strict', secure: true, expires: session_length }
 }));
 
+//----------------------------------------------------------- GENERAL USE FUNCTIONS -----------------------------------------------------------//
+
+function fixInput(input) {
+    const regex = /[^A-Za-z0-9.,:;!?()\[\]{}'" -_]/g;
+    return input.replace(regex, '');
+}
+
+function fixInput(input, regex) {
+    return input.replace(regex, '');
+}
+
 //--------------------------------------------------------------- PAGE HANDLING ---------------------------------------------------------------//
 
 app.get('/', (req, res)=>{ 
 	res.send();
 }); 
-/*
-app.get('/app.js', (req, res)=>{ 
-	res.send('<script>window.location.replace("/")</script>');
-}); 
-*/
-app.get('/session', (req, res)=>{
+
+app.get('/sessions', (req, res)=>{
 	if (req.session.email != null) {
 		res.send(req.session.email);
 	} else {
@@ -99,37 +145,46 @@ app.get('/home',(req,res) => {
 	}
 });
 
+app.post('/files', upload.single('file'), (req, res) => {
+	//console.log(res.req.file.filename)
+    if (req.file) {
+        res.send({ url: res.req.file.filename });
+    } else {
+        res.status(400).send('File upload failed');
+    }
+});
+
 //--------------------------------------------------------------- API CALLS ---------------------------------------------------------------//
 
 app.post('/api/accounts', function(req, res){
-	console.log("Account creation request received.");
-
 	var r_email = req.body.email;
 	var r_password = req.body.password;
 	var r_name = req.body.name;
 	var r_birthday = req.body.birthday;
 	var r_handle = req.body.handle;
+	var r_photo = req.body.photo;
+	
+	r_name = fixInput(r_name, /[^A-Za-z0-9.,:;!?()\[\]{}'" -_]/g);
+	r_handle = fixInput(r_handle, /[^0-9a-z-]/g);
 	
 	res.type('application/json');
 	bcrypt.genSalt(password_salt, (err, salt) => {
 		if (err) {
 			res.status(500);
 			res.json(result);
-			console.log('Failed to salt.');
 			return;
 		}
 		bcrypt.hash(r_password, salt, (err, hash) => {
 			if (err) {
 				res.status(500);
 				res.json(result);
-				console.log('Failed to hash.');
 				return;
 			}
 			
-			var sql = "INSERT INTO users (email, password, name, birthday, handle) VALUES ('" + r_email + "', '" + hash + "', '" + r_name + "', '" + r_birthday + "', '" + r_handle + "')";
-			con.query(sql, function (err, result) {
+			var sql = "INSERT INTO users (Email, Password, Name, Birthday, Handle, ImageURL) VALUES (?, ?, ?, ?, ?, ?)";
+			var values = [r_email, hash, r_name, r_birthday, r_handle, r_photo];
+			con.execute(sql, values, function (err, result) {
 				if (err) throw err;
-				console.log("Record inserted.");
 				res.status(200);
 				res.json(result);
 			})
@@ -142,18 +197,17 @@ app.post('/api/accounts/authenticate', function(req, res) {
 	var l_password = req.body.password;
 	
 	res.type('application/json');
-	var sql = "SELECT password FROM users WHERE email = '" + l_email + "'";
-	con.query(sql, function (err, q_result) {
+	var sql = "SELECT Password FROM users WHERE Email = ?";
+	var values = [l_email];
+	con.execute(sql, values, function (err, q_result) {
 		if (err) throw err;
 		if (q_result.length == 1) {
-			bcrypt.compare(l_password, q_result[0].password, (err, h_result) => {				
+			bcrypt.compare(l_password, q_result[0].Password, (err, h_result) => {				
 				if (err) {
 					res.status(500);
 					res.json(h_result);
-					console.error('Error comparing passwords:', err);
 					return;
-				}
-				
+				}				
 				if (h_result) {
 					console.log("Account authenticated (" + l_email + ").");
 					res.status(200);
@@ -176,8 +230,9 @@ app.post('/api/accounts/namecheck', function(req, res) {
 	var t_handle = req.body.handle;
 
 	res.type('application/json');
-	var sql = "SELECT id FROM users WHERE handle= '" + t_handle + "'";
-	con.query(sql, function (err, q_result) {
+	var sql = "SELECT UserID FROM users WHERE Handle= ?";
+	var values = [t_handle];
+	con.execute(sql, values, function (err, q_result) {
 		if (err) throw err;
 		if (q_result.length >= 1) {
 			res.status(401);
@@ -189,15 +244,39 @@ app.post('/api/accounts/namecheck', function(req, res) {
 	})
 })
 
+app.post('/api/accounts/retrieve', function(req, res) {
+	var r_email = req.body.email;
+
+	res.type('application/json');
+	var sql = "SELECT UserID, Name, Email, Handle, ImageURL FROM users WHERE Email = ?";
+	var values = [r_email];
+	con.execute(sql, values, function (err, q_result) {
+		if (err) throw err;
+		if (q_result.length == 1) {
+			res.status(200);
+			res.send(q_result)
+		} else {
+			res.status(401);
+			res.send(null);
+		}
+	})
+})
+
 app.post('/api/posts', function(req, res) {
 	var r_email = req.body.email;
 	var r_content = req.body.content;
+	var r_parent = req.body.parentpostid
+	r_content = r_content.replace(/[^A-Za-z0-9.,:;!?()\[\]{}'" -_]/g, '');
 	
-	var sql = "SELECT id FROM users WHERE email = '" + r_email + "'";
-	con.query(sql, function (err, q_result) {
+	if (r_parent === undefined) r_parent = null;
+	
+	var sql = "SELECT UserID FROM users WHERE Email = ?";
+	var values = [r_email];
+	con.execute(sql, values, function (err, q_result) {
 		if (err) throw err;
-		var sql = "INSERT INTO posts (poster, content) VALUES ('" + q_result[0].id + "', '" + r_content + "')";
-		con.query(sql, function (err, result) {
+		var sql = "INSERT INTO posts (UserID, Content, ParentPostID) VALUES (?, ?, ?)";
+		var values = [q_result[0].UserID, r_content, r_parent];
+		con.execute(sql, values, function (err, result) {
 			if (err) throw err;
 			res.status(200);
 			res.json(result);
@@ -206,8 +285,18 @@ app.post('/api/posts', function(req, res) {
 })
 
 app.get('/api/posts', function(req, res) {
-	var sql = "SELECT users.name, users.handle, posts.created, posts.content FROM users INNER JOIN posts ON users.id=posts.poster;";
-	con.query(sql, function (err, q_result) {
+	var r_parent = req.query.parentpostid;
+	var sql;
+	
+	if (req.query.postid) {
+		sql = "SELECT users.UserID, users.Name, users.Handle, users.ImageURL, posts.PostID, posts.Created, posts.Content, posts.Likes, posts.Comments, posts.Reposts FROM users INNER JOIN posts ON users.UserID=posts.UserID WHERE posts.PostID=" + req.query.postid;
+	} else {
+		if (r_parent === undefined) r_parent = " IS NULL";
+		else r_parent = "=" + r_parent;
+		sql = "SELECT users.UserID, users.Name, users.Handle, users.ImageURL, posts.PostID, posts.Created, posts.Content, posts.Likes, posts.Comments, posts.Reposts FROM users INNER JOIN posts ON users.UserID=posts.UserID WHERE posts.ParentPostID" + r_parent;
+	}
+	sql += ";"
+	con.execute(sql, function (err, q_result) {
 		if (err) throw err;
 		res.status(200);
 		res.send(q_result)
@@ -217,7 +306,7 @@ app.get('/api/posts', function(req, res) {
 //--------------------------------------------------------------- APP ---------------------------------------------------------------//
 
 function main() {
-	console.log('Starting r1bb1t page server on http://localhost:' + app.get('port'));
+	console.log('Starting r1bb1t server...');
 	console.log(__dirname)
 
 	if (generate_session_key) {
@@ -228,7 +317,7 @@ function main() {
 			  if (err) {
 				console.error(err);
 			  } else {
-				console.log("Generated session token."); 
+				console.log("Generated session token"); 
 			  }
 			});
 		});
@@ -236,7 +325,7 @@ function main() {
 
 	con.connect(function(err) {
 		if (err) throw err;
-		console.log("Conntected to SQL server.");
+		console.log("Conntected to SQL server");
 	});
 
 	http.createServer(app).listen(80);
@@ -244,3 +333,4 @@ function main() {
 }
 
 main();
+

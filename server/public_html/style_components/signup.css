@@ -165,3 +165,55 @@ label {
 	color: #000000;
 	width: 100%;
 }
+
+#profile-pic {
+	display: block;
+	margin: auto;
+	width: 200px;
+	height: 200px;
+	margin-top: 10px;
+	margin-bottom: 40px;
+	border-radius: 50%;
+	border-style: solid;
+	border-color: #eeeeee;
+	border-width: 1px;
+}
+
+#r_file {
+	height: 45px;
+	border-color: #cccccc;
+	border-width: 1px;
+	border-style: solid;
+	padding-top: 8px;
+	padding-right: 25px;
+	text-align: center;
+}
+
+#r_file::file-selector-button {
+	font-family: Sora, Arial, Verdana;
+	font-size: 0px;
+	width: 0px;
+	height: 0px;
+	border-color: #ffffff;
+	border-width: 0px;
+	border-style: solid;
+}
+
+#avatar-form {
+	display: inline;
+	position: absolute;
+	z-index: 4;
+	margin-top: 355px;
+	max-width: 460px;
+	width: 70%;
+}
+
+#r_file_submit {
+	width: 100px;
+	height: 35px;
+	display: block;
+	margin: auto;
+	font-size: 14px;
+	margin-top: 5px;
+	padding-top: 4px;
+}

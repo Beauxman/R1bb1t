@@ -12,14 +12,30 @@ function checkFormInputs() {
 		$("#register-next-1").removeAttr("disabled");
 		$("#register-next-1").css('background-color', '#00ffcc');
 	}
-	
-	console.log(checked_handle);
-	if ($('#r_handle').val != checked_handle) {
+	//
+	if ($('#r_handle').val() != checked_handle) {
 		$('#handle-check-note').html('');
-		console.log(checked_handle);
-		
 		$("#register-next-2").attr("disabled","disabled");
 		$("#register-next-2").css('background-color', 'gray');
+	}
+	//
+	var rgx = /[A-Z]/;
+	var rgx2 = /[^0-9a-z-]/;
+	if (rgx.test($('#r_handle').val())) {
+		$('#handle-check-note').html('Must be lowercase.');
+		$("#register-next-2").attr("disabled","disabled");
+		$("#register-next-2").css('background-color', 'gray');
+		
+		$("#handle-check").attr("disabled","disabled");
+	} else if (rgx2.test($('#r_handle').val())) {
+		$('#handle-check-note').html('Contains invalid character.');
+		$("#register-next-2").attr("disabled","disabled");
+		$("#register-next-2").css('background-color', 'gray');
+		
+		$("#handle-check").attr("disabled","disabled");
+	} else {
+		$('#handle-check-note').html('');
+		$("#handle-check").removeAttr("disabled");
 	}
 
 	if(!$("#r_password").val()
@@ -40,7 +56,9 @@ function registerMenu1() {
 	$("#register-page-1").show();
 	$("#register-page-2").hide();
 	$("#register-page-3").hide();
+	$("#register-page-4").hide();
 	
+	$("#avatar-form").hide();	
 	$("#back-menu").hide();
 	
 	$("#register-next-2").attr("disabled","disabled");
@@ -53,7 +71,9 @@ function registerMenu2() {
 	$("#register-page-1").hide();
 	$("#register-page-2").show();
 	$("#register-page-3").hide();
+	$("#register-page-4").hide();
 	
+	$("#avatar-form").hide();
 	$("#back-menu").show();
 	current_menu = 2;
 }
@@ -62,10 +82,24 @@ function registerMenu3() {
 	$("#register-page-1").hide();
 	$("#register-page-2").hide();
 	$("#register-page-3").show();
+	$("#register-page-4").hide();
 	
+	$("#avatar-form").show();
 	$("#back-menu").show();
-
+	
 	current_menu = 3;
+}
+
+function registerMenu4() {
+	$("#register-page-1").hide();
+	$("#register-page-2").hide();
+	$("#register-page-3").hide();
+	$("#register-page-4").show();
+	
+	$("#avatar-form").hide();
+	$("#back-menu").show();
+	
+	current_menu = 4;
 }
 
 function handleCheckPos() {
@@ -91,12 +125,15 @@ $('#r_form input').blur(function() {
 $("#register-btn").click(registerMenu1);
 $("#register-next-1").click(registerMenu2);
 $("#register-next-2").click(registerMenu3);
+$("#register-next-3").click(registerMenu4);
 
 $("#back-menu").click(function(){
 	if (current_menu == 2) {
 		registerMenu1();
 	} else if (current_menu == 3) {
 		registerMenu2();
+	} else if (current_menu == 4) {
+		registerMenu3();
 	}
 });
 
@@ -109,9 +146,17 @@ $("#login-btn").click(function(){
 });
 
 $("#exit-menu").click(function(){
+	$("#avatar-form").hide();
 	$(".gray-background").hide();
 	current_menu = 0;
 	
+});
+
+$("#r_file_submit").click(function(){
+	$("#r_file_submit").attr("disabled","disabled");
+	setTimeout(() => {
+		$("#r_file_submit").removeAttr("disabled");
+	}, "4000");
 });
 
 $('#r_password, #r_password2').on('keyup', function () {

@@ -16,7 +16,7 @@ function request_session(session_email, on_success) {
 
 function access_session(on_success) {
 	const session_request = new XMLHttpRequest()
-	session_request.open('GET', '/session')
+	session_request.open('GET', '/sessions')
 	session_request.setRequestHeader('Content-Type', 'application/json')
 		
 	session_request.onreadystatechange = function() {

@@ -1,23 +1,48 @@
 CREATE DATABASE r1bb1t;
 
-CREATE TABLE users (
-    id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    name varchar(50),
-    handle varchar(50) UNIQUE,
-    email varchar(50) NOT NULL UNIQUE,
-    password varchar(255) NOT NULL,
-    description varchar(255),
-	birthday DATE,
-    photo varchar(255),
-	created DATETIME DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    Name VARCHAR(50),
+    Handle VARCHAR(50) UNIQUE,
+    Email VARCHAR(50) NOT NULL UNIQUE,
+    Password VARCHAR(255) NOT NULL,
+    Description VARCHAR(255),
+	Birthday DATE,
+    ImageURL VARCHAR(255),
+	Created DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE posts (
-    id int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-	poster int NOT NULL,
-	content varchar(255),
-	created DATETIME DEFAULT CURRENT_TIMESTAMP,
-	likes int,
-	comments int,
-	reposts int
+CREATE TABLE Posts (
+    PostID INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	UserID INT NOT NULL,
+	Content VARCHAR(255),
+	Created DATETIME DEFAULT CURRENT_TIMESTAMP,
+	Likes INT DEFAULT 0,
+	Comments INT DEFAULT 0,
+	Reposts INT DEFAULT 0,
+	ParentPostID INT DEFAULT NULL,
+	FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+CREATE TABLE Likes (
+    LikeID INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	UserID INT NOT NULL,
+    PostID INT NOT NULL,
+    FOREIGN KEY (LikeID) REFERENCES Users(UserID),
+    FOREIGN KEY (PostID) REFERENCES Posts(PostID)
+);
+
+CREATE TABLE Images (
+    ImageID INT PRIMARY KEY AUTO_INCREMENT,
+    PostID INT,
+    ImageURL VARCHAR(255),
+    FOREIGN KEY (PostID) REFERENCES Posts(PostID)
+);
+
+CREATE TABLE Followers (
+    FollowerID INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	FollowingID INT NOT NULL,
+    Created DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (FollowerID) REFERENCES Users(UserID),
+    FOREIGN KEY (FollowingID) REFERENCES Users(UserID)
 );

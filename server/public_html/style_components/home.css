@@ -64,6 +64,7 @@ h4 {
 		height: auto;
 		overflow-y: hidden;
 		overflow: hidden;
+		display: none;
     }
 	.right-container {
 		display: none;
@@ -221,11 +222,24 @@ h4 {
 	font-size: 14px;
 }
 
-.post {
+#post-view {
+	width: 100%;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #eeeeee;
+	font-size: 14px;
+}
+
+.post, .post-focus {
 	padding: 10px;
 	border-width: 1px;
 	border-bottom-style: solid;
 	border-color: #eeeeee;
+	background-color: #ffffff;
+}
+
+.post:hover {
+	background-color: #f6f6f6;
 }
 
 .post-body > img {
@@ -252,6 +266,7 @@ h4 {
 	border-style: solid;
 	border-color: #eeeeee;
 	border-width: 1px;
+	object-fit: cover;
 }
 
 .post-profile > b {
@@ -267,7 +282,25 @@ h4 {
 .post-body {
 	padding-left: 30px; 
 	padding-right: 30px;
-	padding-bottom: 10px;
+	padding-bottom: 4px;
+}
+
+.post-actions {
+	width: 100%;
+	padding-left: 30px;
+	padding-right: 30px;
+}
+
+.post-actions > button {
+	margin-right: 12%;
+}
+
+.post-actions > button {
+    font-size: 16px;
+}
+
+.post-action-text {
+	margin-left: 10px;
 }
 
 .right-menu {
@@ -321,5 +354,13 @@ h4 {
 	height: 34px;
 	font-weight: bold;
 	margin-left: auto;
+}
+
+.post-view-title {
+	height: 40px;
+	padding: 10px;
+	margin-bottom: 15px;
+	font-size: 20px;
+	font-weight: bold;
 }
 

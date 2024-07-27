@@ -4,9 +4,13 @@
 		<title>R1bb1t | Make the Leap</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="Connect with your friends and the whole world with this R1bb1t! This is a social media app for everyone. Make the leap!">
+		<meta name="keywords" content="r1bb1t, ribbit, social, social media, post, connect, friends, like, comment, share">
+		<meta name="author" content="Andrew Bowman">
 		<link rel="icon" type="image" href="client_art/favicon.ico">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 		<link rel="stylesheet" href="style_components/signup.css" type="text/css">
+		<link rel="stylesheet" href="style_components/global.css" type="text/css">
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Sora:wght@700&display=swap" rel="stylesheet"> 
@@ -22,6 +26,10 @@
 						<div id="menu-header">R1</div>
 					</div>
 					<div class="register-form">
+						<form action="/files" enctype="multipart/form-data" id="avatar-form" method="POST" onsubmit="return false">
+								<input class="form-control" type="file" id="r_file" name="file" required>
+								<input class="btn form-btn" type="submit" id="r_file_submit" value="Upload">
+						</form>
 						<h3 class="med-text" style="font-size: 32px;">Create an account</h3>
 						<form id="r_form" onsubmit="return false">
 							<div id="register-page-1">
@@ -29,18 +37,24 @@
 								<input type="email" class="form-control form-input" id="r_email" placeholder="Email" required>
 								<p style="margin-top: 60px;">Date of birth:</p>
 								<input type="date" class="form-control form-input" id="r_birthday" placeholder="Date of birth" required>
-								<button type="button" class="btn form-btn" id="register-next-1" style="margin-top: 50px;">Next</button>
+								<button type="button" class="btn form-btn" id="register-next-1" style="margin-top: 55px;">Next</button>
 							</div>
 							<div id="register-page-2">
-								<p style="margin-top: 20px;">R1bb1t name:</p>
+								<p style="margin-top: 35px;">R1bb1t name:</p>
 								<p style="font-size: 14px;">This is unique to you</p>
 								<label>@</label>
 								<input type="text" class="form-control form-input" id="r_handle" placeholder="Someone" style="width: 60%; margin-top: 0px; display: inline;" required>
 								<button type="button" class="btn form-btn" id="handle-check" style="width: 50%; font-size: 14px;">Check availability</button>
 								<p id="handle-check-note" style="font-size: 14px; display: inline;"></p>
-								<button type="button" class="btn form-btn" id="register-next-2" style="margin-top: 175px;">Next</button>
+								<button type="button" class="btn form-btn" id="register-next-2" style="margin-top: 180px;">Next</button>
 							</div>
 							<div id="register-page-3">
+								<p style="margin-top: 35px;">Profile picture:</p>
+								<p style="font-size: 14px;">Not required</p>
+								<img src="profile.jpg" id="profile-pic" style="object-fit: cover;">
+								<button type="button" class="btn form-btn" id="register-next-3" style="margin-top: 70px;">Next</button>
+							</div>
+							<div id="register-page-4">
 								<div style="padding-top: 40px;"></div>
 								<input type="password" class="form-control form-input" id="r_password" placeholder="Password" required>
 								<input type="password" class="form-control form-input" id="r_password2" placeholder="Re-enter password" required>
