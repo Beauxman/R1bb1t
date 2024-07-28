@@ -18,6 +18,8 @@ h4 {
 	font-weight: bold;
 }
 
+/*--------------------------- LEFT MENU ---------------------------*/
+
 .left-menu {
 	height: 100vh;
 	overflow-y: auto;
@@ -121,6 +123,14 @@ h4 {
 	padding-top: 10px;
 }
 
+#my-post-profile:hover {
+	border-radius: 20px;
+	background-color: #dddddd;
+	transition-duration: 0.5s;
+}
+
+/*--------------------------- POSTS VIEW ---------------------------*/
+
 .center-scroller {
 	width: 100%;
 	max-width: 800px;
@@ -150,7 +160,7 @@ h4 {
 }
 
 .center-buttons > button:hover {
-	background-color: #dddddd;
+	background-color: #f6f6f6;
 	transition-duration: 0.5s;
 }
 
@@ -180,6 +190,11 @@ h4 {
 
 .post-options {
 	display: flex;
+}
+
+.post-option-true {
+	color: #00e6b8;
+	background-color: #e6fffa;
 }
 
 #post-file-input {
@@ -240,6 +255,7 @@ h4 {
 
 .post:hover {
 	background-color: #f6f6f6;
+	transition-duration: 0.5s;
 }
 
 .post-body > img {
@@ -292,7 +308,7 @@ h4 {
 }
 
 .post-actions > button {
-	margin-right: 12%;
+	margin-right: 2vw;
 }
 
 .post-actions > button {
@@ -302,6 +318,8 @@ h4 {
 .post-action-text {
 	margin-left: 10px;
 }
+
+/*--------------------------- RIGHT MENU ---------------------------*/
 
 .right-menu {
 	width: 100%;
@@ -364,3 +382,115 @@ h4 {
 	font-weight: bold;
 }
 
+/*--------------------------- PROFILES VIEW ---------------------------*/
+
+#profile {
+	font-size: 18px;
+	border-width: 1px;
+	border-left-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-color: #eeeeee;
+}
+
+#profile-header {
+	padding: 5px;
+}
+
+.profile-title {
+	color: #000000;
+	font-family: Sora, Arial, Verdana;
+	font-size: 24px;
+}
+
+.profile-title2 {
+	color: #000000;
+	font-family: Sora, Arial, Verdana;
+	font-size: 26px;
+}
+
+#profile-avatar {
+	position: absolute;
+	z-index: 2;
+	margin-top: 120px;
+	margin-left: 20px;
+	border-radius: 50%;
+	border-color: #ffffff;
+	border-width: 4px;
+	border-style: solid;
+	width: 140px;
+	height: 140px;
+}
+
+#profile-background {
+	height: 210px;
+	background-color: #00ffcc;
+	margin-bottom: 10px;
+}
+
+#profile-options {
+	float: right;
+	margin-right: 20px;
+}
+
+.follow-button {
+	background-color: #000000;
+	color: #ffffff;
+	font-size: 14px;
+	border-radius: 30px;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top: 6px;
+	height: 34px;
+	font-weight: bold;
+	margin-left: auto;
+}
+
+.follow-button:hover {
+	color: #ffffff;
+}
+
+.follow-button:active {
+	color: #ffffff;
+}
+
+#profile-body {
+	padding: 16px;
+	color: #595959;
+	font-size: 16px;
+}
+
+#following-followers {
+	font-size: 14px;
+}
+
+#following-followers > span > b {
+	color: #000000;
+}
+
+#profile-threads {
+	display: flex;
+	flex-direction: row;
+	height: 50px;
+}
+
+.profile-thread {
+	height: 100%;
+	flex: 33.3%;
+	text-align: center;
+	font-size: 16px;
+	color: #262626;
+	border-width: 0px;
+}
+
+.profile-thread:hover {
+	background-color: #eeeeee;
+	transition-duration: 0.5s;
+}
+
+.profile-thread-selected {
+	border-width: 0px;
+	border-bottom-width: 4px;
+	border-style: solid;
+	border-color: #00ffcc;
+}

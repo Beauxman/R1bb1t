@@ -286,22 +286,82 @@ app.post('/api/posts', function(req, res) {
 
 app.get('/api/posts', function(req, res) {
 	var r_parent = req.query.parentpostid;
-	var sql;
+	var whereConstraint = "1=1";
 	
 	if (req.query.postid) {
-		sql = "SELECT users.UserID, users.Name, users.Handle, users.ImageURL, posts.PostID, posts.Created, posts.Content, posts.Likes, posts.Comments, posts.Reposts FROM users INNER JOIN posts ON users.UserID=posts.UserID WHERE posts.PostID=" + req.query.postid;
+		whereConstraint = "p.postID = " + Number(req.query.postid);
 	} else {
-		if (r_parent === undefined) r_parent = " IS NULL";
-		else r_parent = "=" + r_parent;
-		sql = "SELECT users.UserID, users.Name, users.Handle, users.ImageURL, posts.PostID, posts.Created, posts.Content, posts.Likes, posts.Comments, posts.Reposts FROM users INNER JOIN posts ON users.UserID=posts.UserID WHERE posts.ParentPostID" + r_parent;
+		if (r_parent === undefined || r_parent == "undefined")
+			whereConstraint = "p.ParentPostID IS NULL";
+		else 
+			whereConstraint = "p.ParentPostID = " + Number(r_parent);
 	}
-	sql += ";"
-	con.execute(sql, function (err, q_result) {
+	
+	res.type('application/json');
+	var sql = "SELECT UserID FROM users WHERE Email = ?";
+	var values = [req.query.currentuseremail];
+	con.execute(sql, values, function (err, q_result) {
 		if (err) throw err;
-		res.status(200);
-		res.send(q_result)
+		var sql = `
+			SELECT u.UserID, u.Name, u.Handle, u.ImageURL, p.PostID, p.Content, p.Created, p.Reposts,
+			COUNT(DISTINCT l.PostID) AS Likes,
+			COUNT(DISTINCT c.PostID) AS Comments,
+			IF(ul.UserID IS NOT NULL, 1, 0) AS UserHasLiked,
+			IF(uc.UserID IS NOT NULL, 1, 0) AS UserHasCommented
+			FROM Posts p
+			LEFT JOIN Likes l ON p.PostID = l.PostID
+			LEFT JOIN Users u ON p.UserID = u.UserID
+			LEFT JOIN Posts c ON p.PostID = c.ParentPostID
+			LEFT JOIN Likes ul ON p.PostID = ul.PostID AND ul.UserID = ${q_result[0].UserID}
+			LEFT JOIN Posts uc ON p.PostID = uc.ParentPostID AND uc.UserID = ${q_result[0].UserID}
+			WHERE ${whereConstraint} 
+			GROUP BY p.PostID;
+			`
+		con.execute(sql, function (err, q_result) {
+			if (err) throw err;
+			res.status(200);
+			res.send(q_result)
+		})
 	})
 })
+
+app.post('/api/posts/likes', function(req, res) {
+	var r_email = req.body.email;
+	var r_postid = req.body.postid;
+
+	var sql = `
+		INSERT INTO likes (UserID, PostID)
+		SELECT u.UserID, ?
+		FROM users AS u
+		WHERE u.email = ?
+		`
+	var values = [r_postid, r_email];
+	con.execute(sql, values, function (err, q_result) {
+		if (err) throw err;
+		res.status(200);
+		res.json(q_result);
+
+	})
+})
+
+app.delete('/api/posts/likes', function(req, res) {
+	var r_email = req.query.currentuseremail;
+	var r_postid = req.query.postid;
+
+	var sql = `
+		DELETE l FROM Likes l
+		INNER JOIN Users u ON l.UserID = u.UserID
+		WHERE l.PostID = ? AND u.Email = ?;
+		`
+	var values = [r_postid, r_email];
+	con.execute(sql, values, function (err, q_result) {
+		if (err) throw err;
+		res.status(200);
+		res.json(q_result);
+
+	})
+})
+
 
 //--------------------------------------------------------------- APP ---------------------------------------------------------------//
 
@@ -333,4 +393,3 @@ function main() {
 }
 
 main();
-

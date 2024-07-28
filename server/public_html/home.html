@@ -38,7 +38,7 @@
 								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-user"></span><span class="left-menu-text">Profile</span></button>
 								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-option-horizontal"></span><span class="left-menu-text">More</span></button>
 								<button type="button" class="btn left-post-btn" style="padding-right: 0px; font-weight: bold;" id="test">Post</button>
-								<div class="post-profile" style="margin-top: 60px;">
+								<div class="post-profile" style="margin-top: 60px;" id="my-post-profile">
 									<img src="" id="my-profile-icon-1" style="width: 64px; height: 64px; object-fit: cover;">
 									<div class="right-profile left-profile-text">
 										<b id="my-profile-name"></b>
@@ -48,70 +48,86 @@
 							</div>
 						</div>
 						<div class="col-sm-5">
-							<div class="center-scroller" id="center-screen-1" style="-display: none;">
-								<div class="center-buttons">
-									<button type="button" class="btn" style="border-bottom-width: 4px; border-color: #00ffcc;">For you</button>
-									<button type="button" class="btn">Following</button>
-								</div>
-								<div class="make-post">
-									<img src="" id="my-profile-icon-2" style="object-fit: cover;">
-									<form id="p_form" onsubmit="return false">
-										<textarea class="form-control" id="make-post-content" placeholder="What is hopping?!" rows="3"></textarea>
-										<div class="post-options">
-											<!--<input class="form-control form-control-sm" id="formFileSm" type="file">-->
-											<button type="submit" class="btn make-post-btn">Post</button>
+							<div id="post-container">
+								<div class="center-scroller" id="center-screen-1">
+									<div class="center-buttons">
+										<button type="button" class="btn" style="border-bottom-width: 4px; border-color: #00ffcc;">For you</button>
+										<button type="button" class="btn">Following</button>
+									</div>
+									<div class="make-post">
+										<img src="" id="my-profile-icon-2" style="object-fit: cover;">
+										<form id="p_form" onsubmit="return false">
+											<textarea class="form-control" id="make-post-content" placeholder="What is hopping?!" rows="3"></textarea>
+											<div class="post-options">
+												<!--<input class="form-control form-control-sm" id="formFileSm" type="file">-->
+												<button type="submit" class="btn make-post-btn">Post</button>
+											</div>
+										</form>
+									</div>
+									<div class="reload-posts">
+									</div>
+									<div id="post-feed">
+										<!--<div class="post">
+											<div class="post-profile">
+												<img src="profile.jpg">
+												<b>Andrew</b>
+												<p>@beauxman - 5h</p>
+											</div>
+											<div class="post-body">
+												<img src="https://i.imgur.com/tGYqe93.jpeg" style="width: 100%; border-radius: 5%;">
+											</div>
 										</div>
-									</form>
+										<div class="post">
+											<div class="post-profile">
+												<img src="profile2.jpg">
+												<b>Gaby</b>
+												<p>@catblush - 2h</p>
+											</div>
+											<div class="post-body">
+												<img src="img1.jpg" style="width: 100%; border-radius: 5%;">
+											</div>
+										</div>-->
+									</div>
 								</div>
-								<div class="reload-posts">
-								</div>
-								<div id="post-feed">
-									<div class="post" data-post-id="0">
-										<div class="post-profile">
-											<img src="profile.jpg">
-											<b>Andrew</b>
-											<p>@beauxman - 5h</p>
+								<div class="center-scroller" id="center-screen-2" style="display: none;">
+									<div id="post-view">
+										<div class="post-view-title">
+											<button type="button" class="btn left-btn" id="button-back-2" style="border-radius: 20px; font-size: 24px;"><span class="glyphicon glyphicon-arrow-left"></span></button>
+											<span style="margin-left: 10px">Post</span>
 										</div>
-										<div class="post-body">
-											<p>Testing. Hi!</p>
+										<div id="post-view-container">
 										</div>
-										<div class="post-actions">
-											<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-comment"></span><span class="post-action-text">0</span></button>
-											<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-retweet"></span><span class="post-action-text">0</span></button>
-											<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-heart"></span><span class="post-action-text">0</span></button>
+										<div id="post-view-comments">
 										</div>
 									</div>
-									<!--<div class="post">
-										<div class="post-profile">
-											<img src="profile.jpg">
-											<b>Andrew</b>
-											<p>@beauxman - 5h</p>
-										</div>
-										<div class="post-body">
-											<img src="https://i.imgur.com/tGYqe93.jpeg" style="width: 100%; border-radius: 5%;">
-										</div>
-									</div>
-									<div class="post">
-										<div class="post-profile">
-											<img src="profile2.jpg">
-											<b>Gaby</b>
-											<p>@catblush - 2h</p>
-										</div>
-										<div class="post-body">
-											<img src="img1.jpg" style="width: 100%; border-radius: 5%;">
-										</div>
-									</div>-->
 								</div>
 							</div>
-							<div class="center-scroller" id="center-screen-2" style="display: none;">
-								<div id="post-view">
-									<div class="post-view-title">
-										<button type="button" class="btn left-btn" id="button-back-2" style="border-radius: 20px; font-size: 24px;"><span class="glyphicon glyphicon-arrow-left"></span></button>
-										<span style="margin-left: 10px">Post</span>
-									</div>
-									<div id="post-view-container">
-									</div>
-									<div id="post-view-comments">
+							<div id="profile-container" style="display: none;">
+								<div class="center-scroller">
+									<div id="profile">
+										<div id="profile-header">
+											<button type="button" class="btn left-btn" id="button-back-profile" style="border-radius: 20px; font-size: 24px;"><span class="glyphicon glyphicon-arrow-left"></span></button>
+											<div class="profile-title" style="display: inline; margin-left: 16px;">Andrew</div>
+										</div>
+										<img id="profile-avatar" src="profile.jpg" style="object-fit: cover; background-color: white;">
+										<div id="profile-background">
+										</div>
+										<div id="profile-options">
+											<button type="button" class="btn follow-button">Follow</button>
+										</div>
+										<div id="profile-body" style="margin-top: 45px;">
+											<div class="profile-title2">Andrew</div>
+											<p>@beauxman</p>
+											<p>Joined ....</p>
+											<div id="following-followers">
+												<span><b>699</b> Following</span><span style="margin-left: 20px"><b>564</b> Followers</span>
+											</div>
+										</div>
+										<div id="profile-threads">
+											<button type="button" class="profile-thread profile-thread-selected"><b>Posts</b></button>
+											<button type="button" class="profile-thread"><b>Replies</b></button>
+											<button type="button" class="profile-thread"><b>Media</b></button>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -133,7 +149,7 @@
 							</div>
 							<div class="right-follows">
 								<h4>Who to follow</h4>
-								<div class="post-profile">
+								<div class="post-profile" data-post-id="1">
 									<img src="profile.jpg">
 									<div class="right-profile">
 										<b>Andrew</b>
@@ -141,7 +157,7 @@
 									</div>
 									<button type="button" class="btn">Follow</button>
 								</div>
-								<div class="post-profile">
+								<div class="post-profile" data-post-id="1">
 									<img src="profile2.jpg">
 									<div class="right-profile">
 										<b>Gaby</b>
@@ -149,7 +165,7 @@
 									</div>
 									<button type="button" class="btn">Follow</button>
 								</div>
-								<div class="post-profile">
+								<div class="post-profile" data-post-id="1">
 									<img src="profile.jpg">
 									<div class="right-profile">
 										<b>Jacob</b>
