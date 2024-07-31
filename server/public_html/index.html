@@ -27,7 +27,7 @@
 					</div>
 					<div class="register-form">
 						<form action="/files" enctype="multipart/form-data" id="avatar-form" method="POST" onsubmit="return false">
-								<input class="form-control" type="file" id="r_file" name="file" required>
+								<input class="form-control" type="file" id="r_file" name="file" accept="image/*" required>
 								<input class="btn form-btn" type="submit" id="r_file_submit" value="Upload">
 						</form>
 						<h3 class="med-text" style="font-size: 32px;">Create an account</h3>
@@ -97,5 +97,10 @@
 		<script src="control_components/session_interface.js"></script>
 		<script src="control_components/registration_manager.js"></script>
 		<script src="control_components/authentication_interface.js"></script>
+		<script>
+			access_session(function (response) {
+				if (response != 'Invalid session') window.location.replace("/home");
+			});
+		</script>
 	</body>
 </html>

@@ -52,6 +52,12 @@ h4 {
 	}
 }
 
+@media(max-width: 1000px) {
+	#logo {
+		display: none;
+	}
+}
+
 @media(max-width: 768px) {
     .left-menu-text {
         font-size: 24px;
@@ -117,6 +123,16 @@ h4 {
 	background-color: #00ffcc;
 	width: 100%;
 	text-align: center;
+	border-width: 1px;
+}
+
+.left-post-btn:hover {
+	background-image: linear-gradient(30deg, #00ffcc, #00ffff);
+	color: #ffffff;
+	border-color: #ccfff5;
+	border-width: 1px;
+	font-weight: bold;
+	transition-duration: 0.3s;
 }
 
 .left-profile-text {
@@ -127,6 +143,7 @@ h4 {
 	border-radius: 20px;
 	background-color: #dddddd;
 	transition-duration: 0.5s;
+	cursor: pointer;
 }
 
 /*--------------------------- POSTS VIEW ---------------------------*/
@@ -164,6 +181,11 @@ h4 {
 	transition-duration: 0.5s;
 }
 
+.center-button-selected {
+	border-bottom-width: 4px !important; 
+	border-color: #00ffcc;
+}
+
 .make-post {
 	border-width: 1px;
 	border-style: solid;
@@ -186,6 +208,32 @@ h4 {
 .make-post > form {
 	width: 100%;
 	padding-right: 20px;
+}
+
+.upload-file {
+	margin-top: 14px;
+	margin-left: 20px;
+	height: 30px;
+	width: 30px;
+	border-width: 0px;
+	border-radius: 10px;
+	padding-top: 2px;
+	padding-right: 25px;
+	text-align: center;
+	background-color: #00ffcc;
+	background-image: url("icons/upload-icon.png");
+	background-position: center;
+    background-repeat: no-repeat;
+}
+
+.upload-file:hover {
+	-background-image: linear-gradient(30deg, #00ffcc, #00ffff);
+	transform: scale(1.04);
+	transition-duration: 0.3s;
+}
+
+.upload-file::file-selector-button {
+	visibility: hidden;
 }
 
 .post-options {
@@ -222,7 +270,17 @@ h4 {
 	color: #000000;
 	font-size: 18px;
 	border-radius: 30px;
+	border-width: 1px;
 	font-weight: bold;
+}
+
+.make-post-btn:hover {
+	background-image: linear-gradient(30deg, #00ffcc, #00ffff);
+	color: #ffffff;
+	border-color: #ccfff5;
+	border-width: 1px;
+	font-weight: bold;
+	transition-duration: 0.3s;
 }
 
 .reload-posts {
@@ -241,6 +299,7 @@ h4 {
 	width: 100%;
 	border-width: 1px;
 	border-style: solid;
+	border-bottom-style: none;
 	border-color: #eeeeee;
 	font-size: 14px;
 }
@@ -317,6 +376,11 @@ h4 {
 
 .post-action-text {
 	margin-left: 10px;
+}
+
+.handle-link:hover {
+	text-decoration: underline;
+	cursor: pointer;
 }
 
 /*--------------------------- RIGHT MENU ---------------------------*/
@@ -397,13 +461,13 @@ h4 {
 	padding: 5px;
 }
 
-.profile-title {
+#profile-title {
 	color: #000000;
 	font-family: Sora, Arial, Verdana;
 	font-size: 24px;
 }
 
-.profile-title2 {
+#profile-title2 {
 	color: #000000;
 	font-family: Sora, Arial, Verdana;
 	font-size: 26px;
@@ -435,7 +499,7 @@ h4 {
 
 .follow-button {
 	background-color: #000000;
-	color: #ffffff;
+	color: #ffffff !important;
 	font-size: 14px;
 	border-radius: 30px;
 	padding-left: 15px;
@@ -447,11 +511,17 @@ h4 {
 }
 
 .follow-button:hover {
-	color: #ffffff;
+	transform: scale(1.1);
+	background-color: #00ffcc !important;
+	color: #000000;
+	font-weight: bold;
+	transition-duration: 0.5s;
 }
 
 .follow-button:active {
-	color: #ffffff;
+	background-image: linear-gradient(30deg, #00ffcc, #00ffff);
+	color: #ccfff5;
+	transition-duration: 0.2s;
 }
 
 #profile-body {
@@ -472,6 +542,9 @@ h4 {
 	display: flex;
 	flex-direction: row;
 	height: 50px;
+	border-bottom-style: solid;
+	border-color: #eeeeee;
+	border-width: 1px;
 }
 
 .profile-thread {
@@ -493,4 +566,16 @@ h4 {
 	border-bottom-width: 4px;
 	border-style: solid;
 	border-color: #00ffcc;
+}
+
+#profile-post-feed {
+	width: 100%;
+	font-size: 14px;
+}
+
+.follow-option-true {
+	color: #ffffff !important;
+	background-image: linear-gradient(30deg, #00ffcc, #00ffff);
+	box-shadow: 2px 2px 6px #b3fff0 !important;
+	text-shadow: 2px 2px 6px #99ffeb;
 }

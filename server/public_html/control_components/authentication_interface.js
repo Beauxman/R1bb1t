@@ -27,7 +27,6 @@ $("#r_form").submit(function(){
 	
 	API_request.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
-			alert('Registered.')
 			request_session(s_email, redirect_home);
 		}
 		document.getElementById("r_form").reset();
@@ -94,7 +93,6 @@ document.getElementById('r_file_submit').addEventListener('click', async (event)
 			const imageUrl = data.url;
 			const uploadedImage = document.getElementById('profile-pic');
 			uploadedImage.src = imageUrl;
-			console.log(imageUrl);
 		} else {
 			alert('Failed to upload image.');
 		}

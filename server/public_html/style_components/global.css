@@ -5,9 +5,10 @@ input {
 }
 
 input:focus, textarea:focus {
-	border-color: #00ffcc !important;
+	border-color: #33ffd6 !important;
 	border-width: 3px !important;
 	border-style: solid !important;
+	box-shadow: 2px 2px 6px #b3fff0 !important;
 }
 
 input::placeholder, textarea::placeholder {

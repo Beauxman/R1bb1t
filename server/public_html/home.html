@@ -25,18 +25,18 @@
 						<div class="col-sm-3" >
 							<div class="left-menu">
 								<div style="display: flex;"><h1 style="font-family: Sora;">R1bb1t</h1><img src="client_art/logo.png" id="logo" style="width: 32px; height: 32px; margin-left: 16px; margin-top: 20px;"></div>
-								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-home"></span><span class="left-menu-text">Home</span></button>
-								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-search"></span><span class="left-menu-text">Explore</span></button>
-								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-bell"></span><span class="left-menu-text">Notifications</span></button>
-								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-envelope"></span><span class="left-menu-text">Messages</span></button>
-								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-cloud"></span><span class="left-menu-text">AI</span></button>
-								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-list-alt"></span><span class="left-menu-text">Lists</span></button>
-								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-bookmark"></span><span class="left-menu-text">Bookmarks</span></button>
+								<button type="button" class="btn left-btn" id="home-btn"><span class="glyphicon glyphicon-home"></span><span class="left-menu-text">Home</span></button>
+								<button type="button" class="btn left-btn" disabled><span class="glyphicon glyphicon-search"></span><span class="left-menu-text">Explore</span></button>
+								<button type="button" class="btn left-btn" disabled><span class="glyphicon glyphicon-bell"></span><span class="left-menu-text">Notifications</span></button>
+								<button type="button" class="btn left-btn" disabled><span class="glyphicon glyphicon-envelope"></span><span class="left-menu-text">Messages</span></button>
+								<button type="button" class="btn left-btn" disabled><span class="glyphicon glyphicon-cloud"></span><span class="left-menu-text">AI</span></button>
+								<button type="button" class="btn left-btn" disabled><span class="glyphicon glyphicon-list-alt"></span><span class="left-menu-text">Lists</span></button>
+								<button type="button" class="btn left-btn" disabled><span class="glyphicon glyphicon-bookmark"></span><span class="left-menu-text">Bookmarks</span></button>
 								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-tree-deciduous"></span><span class="left-menu-text">Support</span></button>
 								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-star-empty"></span><span class="left-menu-text">Premium</span></button>
 								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-education"></span><span class="left-menu-text">About</span></button>
-								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-user"></span><span class="left-menu-text">Profile</span></button>
-								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-option-horizontal"></span><span class="left-menu-text">More</span></button>
+								<button type="button" class="btn left-btn" id="profile-btn"><span class="glyphicon glyphicon-user"></span><span class="left-menu-text">Profile</span></button>
+								<button type="button" class="btn left-btn" id="logout-btn"><span class="glyphicon glyphicon-option-horizontal"></span><span class="left-menu-text">Logout</span></button>
 								<button type="button" class="btn left-post-btn" style="padding-right: 0px; font-weight: bold;" id="test">Post</button>
 								<div class="post-profile" style="margin-top: 60px;" id="my-post-profile">
 									<img src="" id="my-profile-icon-1" style="width: 64px; height: 64px; object-fit: cover;">
@@ -51,15 +51,16 @@
 							<div id="post-container">
 								<div class="center-scroller" id="center-screen-1">
 									<div class="center-buttons">
-										<button type="button" class="btn" style="border-bottom-width: 4px; border-color: #00ffcc;">For you</button>
-										<button type="button" class="btn">Following</button>
+										<button type="button" id="for-you-btn" class="btn center-button-selected">For you</button>
+										<button type="button" id="following-btn" class="btn">Following</button>
 									</div>
 									<div class="make-post">
 										<img src="" id="my-profile-icon-2" style="object-fit: cover;">
-										<form id="p_form" onsubmit="return false">
+										<form id="p_form" onsubmit="return false" method="POST">
 											<textarea class="form-control" id="make-post-content" placeholder="What is hopping?!" rows="3"></textarea>
+											<div id="p_display_container"></div>
 											<div class="post-options">
-												<!--<input class="form-control form-control-sm" id="formFileSm" type="file">-->
+												<input class="form-control form-control-sm upload-file" id="p_file" type="file" name="file" accept="image/*">
 												<button type="submit" class="btn make-post-btn">Post</button>
 											</div>
 										</form>
@@ -107,26 +108,28 @@
 									<div id="profile">
 										<div id="profile-header">
 											<button type="button" class="btn left-btn" id="button-back-profile" style="border-radius: 20px; font-size: 24px;"><span class="glyphicon glyphicon-arrow-left"></span></button>
-											<div class="profile-title" style="display: inline; margin-left: 16px;">Andrew</div>
+											<div id="profile-title" style="display: inline; margin-left: 16px;"></div>
 										</div>
 										<img id="profile-avatar" src="profile.jpg" style="object-fit: cover; background-color: white;">
 										<div id="profile-background">
 										</div>
 										<div id="profile-options">
-											<button type="button" class="btn follow-button">Follow</button>
+											<button type="button" class="btn follow-button" id="profile-follow-button">Follow</button>
 										</div>
 										<div id="profile-body" style="margin-top: 45px;">
-											<div class="profile-title2">Andrew</div>
-											<p>@beauxman</p>
-											<p>Joined ....</p>
+											<div id="profile-title2"></div>
+											<p id="profile-handle"></p>
+											<p style="margin-top: 20px;">Joined <span id="profile-created"></span></p>
 											<div id="following-followers">
-												<span><b>699</b> Following</span><span style="margin-left: 20px"><b>564</b> Followers</span>
+												<span><b id="profile-following">699</b> Following</span><span style="margin-left: 20px"><b id="profile-followers">564</b> Followers</span>
 											</div>
 										</div>
 										<div id="profile-threads">
 											<button type="button" class="profile-thread profile-thread-selected"><b>Posts</b></button>
 											<button type="button" class="profile-thread"><b>Replies</b></button>
 											<button type="button" class="profile-thread"><b>Media</b></button>
+										</div>
+										<div id="profile-post-feed">
 										</div>
 									</div>
 								</div>
@@ -142,36 +145,36 @@
 							<div class="right-notice">
 								<h4>Subscribe to premium</h4>
 								<p>Subscribe to unlock new features and if eligible, receive a share of ads revenue.</p>
-								<button type="button" class="btn">Subscribe</button>
+								<button type="button" class="btn follow-button">Subscribe</button>
 							</div>
 							<div class="right-highlights">
 								<h4>What's hopping</h4>
 							</div>
 							<div class="right-follows">
 								<h4>Who to follow</h4>
-								<div class="post-profile" data-post-id="1">
-									<img src="profile.jpg">
+								<div class="post-profile" data-user-id="1">
+									<img src="file-1721791579843.jpg">
 									<div class="right-profile">
 										<b>Andrew</b>
 										<p>@beauxman</p>
 									</div>
-									<button type="button" class="btn">Follow</button>
+									<button type="button" class="btn follow-button">Follow</button>
 								</div>
-								<div class="post-profile" data-post-id="1">
-									<img src="profile2.jpg">
+								<div class="post-profile" data-user-id="3">
+									<img src="file-1721869839940.jpg">
 									<div class="right-profile">
-										<b>Gaby</b>
-										<p>@catblush</p>
+										<b>cat</b>
+										<p>@cat</p>
 									</div>
-									<button type="button" class="btn">Follow</button>
+									<button type="button" class="btn follow-button">Follow</button>
 								</div>
-								<div class="post-profile" data-post-id="1">
-									<img src="profile.jpg">
+								<div class="post-profile" data-user-id="2">
+									<img src="file-1721796328123.jpg">
 									<div class="right-profile">
-										<b>Jacob</b>
-										<p>@jaykstah</p>
+										<b>Brad</b>
+										<p>@brad</p>
 									</div>
-									<button type="button" class="btn">Follow</button>
+									<button type="button" class="btn follow-button">Follow</button>
 								</div>
 							</div>
 						</div>
@@ -182,5 +185,6 @@
 		<script src="control_components/session_interface.js"></script>
 		<script src="control_components/page_logic.js"></script>
 		<script src="control_components/post_interface.js"></script>
+		<script src="control_components/file_manager.js"></script>
 	</body>
 </html>
