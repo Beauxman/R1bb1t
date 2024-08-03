@@ -26,10 +26,6 @@
 						<div id="menu-header">R1</div>
 					</div>
 					<div class="register-form">
-						<form action="/files" enctype="multipart/form-data" id="avatar-form" method="POST" onsubmit="return false">
-								<input class="form-control" type="file" id="r_file" name="file" accept="image/*" required>
-								<input class="btn form-btn" type="submit" id="r_file_submit" value="Upload">
-						</form>
 						<h3 class="med-text" style="font-size: 32px;">Create an account</h3>
 						<form id="r_form" onsubmit="return false">
 							<div id="register-page-1">
@@ -52,7 +48,8 @@
 								<p style="margin-top: 35px;">Profile picture:</p>
 								<p style="font-size: 14px;">Not required</p>
 								<img src="file-defaultprofile.jpg" id="profile-pic" style="object-fit: cover;">
-								<button type="button" class="btn form-btn" id="register-next-3" style="margin-top: 70px;">Next</button>
+								<input class="form-control" type="file" id="r_file" name="file" accept="image/*">
+								<button type="button" class="btn form-btn" id="register-next-3" style="margin-top: 25px;">Next</button>
 							</div>
 							<div id="register-page-4">
 								<div style="padding-top: 40px;"></div>
@@ -97,7 +94,7 @@
 		</div>
 		<div class="container-footer">
 			<span class="footer-item">Copyright © 2024 - R1bb1t.com</span>
-			<a class="footer-item" id="guest-login-btn">Guest login</a>
+			<a class="footer-item" id="guest-login-btn">Guest Login</a>
 			<a class="footer-item" href="/about#support">Support</a>
 			<a class="footer-item" href="/about">About</a>
 		</div>

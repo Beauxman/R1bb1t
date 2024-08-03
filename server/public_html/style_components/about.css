@@ -11,7 +11,7 @@ p {
 	padding-right: 50px;
 }
 
-a {
+a, a:visited, a:hover, a:active {
 	color: #00ffcc !important;
 }
 

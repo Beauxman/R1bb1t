@@ -469,6 +469,16 @@ function main() {
 		if (err) throw err;
 		console.log("Conntected to SQL server");
 	});
+	
+	setInterval(() => {
+		con.query('SELECT 1', (err, results) => {
+			if (err) {
+				console.error('Error executing keep-alive query:', err);
+			} else {
+				console.log('Keep-alive query executed successfully.');
+			}
+		});
+	}, 3600000); 
 
 	http.createServer(appHTTP).listen(80);
 	https.createServer(options, app).listen(443);

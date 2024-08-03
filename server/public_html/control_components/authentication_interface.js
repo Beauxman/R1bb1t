@@ -1,16 +1,43 @@
+var profileHasFile = false;
+
 function redirect_home() {
 	window.location.href = "./home";
 }
 
-$("#r_form").submit(function(){
+$("#r_form").submit(async (event) => {
 	var r_email = document.getElementById("r_email").value
 	var r_password = document.getElementById("r_password").value
 	var r_name = document.getElementById("r_name").value
 	var r_birthday = document.getElementById("r_birthday").value
 	var r_handle = document.getElementById("r_handle").value
 	var r_photo = document.getElementById("profile-pic").getAttribute("src")
-	
 	var s_email = r_email;
+	
+	if (profileHasFile) {
+		event.preventDefault();
+		
+		const form = document.getElementById('r_form');
+		const formData = new FormData(form);
+
+		try {
+			const response = await fetch('/files', {
+				method: 'POST',
+				body: formData
+			});
+
+			if (response) {
+				const data = await response.json();
+				const imageURL = data.url;
+				
+				r_photo = imageURL;
+				postHasFile = false;
+			} else {
+				alert('Failed to upload image.');
+			}
+		} catch (error) {
+			alert('Upload error. No file chosen or file is too large.');
+		}
+	}
 	
 	const API_request = new XMLHttpRequest()
 	API_request.open('POST', '/accounts')
@@ -91,27 +118,14 @@ $("#handle-check").click(function(){
 	API_request.send(request_content);
 });
 
-document.getElementById('r_file_submit').addEventListener('click', async (event) => {
-	event.preventDefault();
-	
-	const form = document.getElementById('avatar-form');
-	const formData = new FormData(form);
-
-	try {
-		const response = await fetch('/files', {
-			method: 'POST',
-			body: formData
-		});
-
-		if (response) {
-			const data = await response.json();
-			const imageUrl = data.url;
-			const uploadedImage = document.getElementById('profile-pic');
-			uploadedImage.src = imageUrl;
-		} else {
-			alert('Failed to upload image.');
-		}
-	} catch (error) {
-		alert('Upload error. No file chosen or file is too large.');
+document.getElementById('r_file').addEventListener('change', function(event) {
+    var file = event.target.files[0];
+	if (file) {
+		const reader = new FileReader();
+		reader.onload = function(e) {
+			document.getElementById('profile-pic').src = e.target.result;
+			profileHasFile = true;
+		};
+		reader.readAsDataURL(file);
 	}
 });
