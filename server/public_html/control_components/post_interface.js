@@ -11,10 +11,9 @@ function timeOffset(time) {
 
 function retrieve_posts(insertionElementID, parentPostID = "undefined", userID = "undefined") {
 	access_session(function (response) {
-		var s_email = response;
 		
 		const API_request = new XMLHttpRequest()
-		API_request.open('GET', '/api/posts?currentuseremail=' + s_email + '&parentpostid=' + parentPostID + '&userid=' + userID);
+		API_request.open('GET', '/posts?parentpostid=' + parentPostID + '&userid=' + userID);
 		API_request.setRequestHeader('Content-Type', 'application/json');
 
 		API_request.onreadystatechange = function() {
@@ -66,10 +65,8 @@ function retrieve_posts(insertionElementID, parentPostID = "undefined", userID =
 
 function retrieve_focus_post(insertionElementID, postID) {	
 	access_session(function (response) {
-		var s_email = response;
-		
 		const API_request = new XMLHttpRequest()
-		API_request.open('GET', '/api/posts?currentuseremail=' + s_email + '&postid=' + postID)
+		API_request.open('GET', '/posts?postid=' + postID)
 		API_request.setRequestHeader('Content-Type', 'application/json');
 
 		API_request.onreadystatechange = function() {
@@ -119,9 +116,12 @@ function retrieve_focus_post(insertionElementID, postID) {
 				$("#p_form2").submit(function(){
 					if (document.getElementById('p_display_container2').innerHTML.length <= 0) {
 						var s_content = document.getElementById("make-post-content2").value
-						makePost(s_content, retrieve_posts("post-view-comments", response_content[0].PostID), null, response_content[0].PostID);
+						makePost(s_content, null, response_content[0].PostID);
 						document.getElementById("p_form2").reset();
 					}
+					setTimeout(() => {
+						retrieve_posts("post-view-comments", response_content[0].PostID);
+					}, "2000");
 				});
 				addPostViewFileListener(response_content[0].PostID);
 				makeFocusPostInteractive(response_content[0].PostID);
@@ -132,37 +132,26 @@ function retrieve_focus_post(insertionElementID, postID) {
 	});
 }
 
-function makePost(content, on_success, imageURL, parentPostID) {
+function makePost(content, imageURL, parentPostID) {
 	if (content == "" && imageURL == null) return;
 	access_session(function (response) {
-		var s_email = response;
-		
 		const API_request = new XMLHttpRequest();
-		API_request.open('POST', '/api/posts');
+		API_request.open('POST', '/posts');
 		API_request.setRequestHeader('Content-Type', 'application/json');
 		
-		const request_content = JSON.stringify({email: s_email, content: content, parentpostid: parentPostID, imageurl: imageURL});
-
-		API_request.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {
-				setTimeout(() => {
-					on_success();
-				}, "2500");
-			}
-		}
+		const request_content = JSON.stringify({content: content, parentpostid: parentPostID, imageurl: imageURL});
+		
 		API_request.send(request_content)
 	})
 }
 
 function addLike(PostID, on_success) {
 	access_session(function (response) {
-		var s_email = response;
-		
 		const API_request = new XMLHttpRequest();
-		API_request.open('POST', '/api/posts/likes');
+		API_request.open('POST', '/posts/likes');
 		API_request.setRequestHeader('Content-Type', 'application/json');
 		
-		const request_content = JSON.stringify({email: s_email, postid: PostID});
+		const request_content = JSON.stringify({postid: PostID});
 
 		API_request.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
@@ -175,10 +164,8 @@ function addLike(PostID, on_success) {
 
 function removeLike(PostID, on_success) {
 	access_session(function (response) {
-		var s_email = response;
-		
 		const API_request = new XMLHttpRequest();
-		API_request.open('DELETE', '/api/posts/likes?currentuseremail=' + s_email + '&postid=' + PostID);
+		API_request.open('DELETE', '/posts/likes?postid=' + PostID);
 		API_request.setRequestHeader('Content-Type', 'application/json');
 
 		API_request.onreadystatechange = function() {
@@ -192,13 +179,11 @@ function removeLike(PostID, on_success) {
 
 function addFollower(FollowingID, on_success) {
 	access_session(function (response) {
-		var s_email = response;
-		
 		const API_request = new XMLHttpRequest();
-		API_request.open('POST', '/api/accounts/followers');
+		API_request.open('POST', '/accounts/followers');
 		API_request.setRequestHeader('Content-Type', 'application/json');
 		
-		const request_content = JSON.stringify({email: s_email, followingid: FollowingID});
+		const request_content = JSON.stringify({followingid: FollowingID});
 
 		API_request.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
@@ -211,10 +196,8 @@ function addFollower(FollowingID, on_success) {
 
 function removeFollower(FollowingID, on_success) {
 	access_session(function (response) {
-		var s_email = response;
-		
 		const API_request = new XMLHttpRequest();
-		API_request.open('DELETE', '/api/accounts/followers?currentuseremail=' + s_email + '&followingid=' + FollowingID);
+		API_request.open('DELETE', '/accounts/followers?followingid=' + FollowingID);
 		API_request.setRequestHeader('Content-Type', 'application/json');
 
 		API_request.onreadystatechange = function() {
@@ -229,13 +212,9 @@ function removeFollower(FollowingID, on_success) {
 
 function retrieve_user() {	
 	access_session(function (response) {
-		var s_email = response;
-		
 		const API_request = new XMLHttpRequest();
-		API_request.open('POST', '/api/accounts/retrieve');
+		API_request.open('POST', '/accounts/retrieve');
 		API_request.setRequestHeader('Content-Type', 'application/json');
-		
-		const request_content = JSON.stringify({email: s_email});
 
 		API_request.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
@@ -247,19 +226,17 @@ function retrieve_user() {
 				document.getElementById("my-post-profile").setAttribute('data-user-id', response_content[0].UserID);
 			}
 		}
-		API_request.send(request_content);
+		API_request.send(null);
 	});
 }
 
 function retrieve_profile(userID) {	
 	access_session(function (response) {
-		var s_email = response;
-		
 		const API_request = new XMLHttpRequest();
-		API_request.open('POST', '/api/accounts/retrieve');
+		API_request.open('POST', '/accounts/retrieve');
 		API_request.setRequestHeader('Content-Type', 'application/json');
 		
-		const request_content = JSON.stringify({email: s_email, userid: userID});
+		const request_content = JSON.stringify({userid: userID});
 
 		API_request.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
@@ -293,6 +270,38 @@ function retrieve_profile(userID) {
 	});
 }
 
+function retrieve_trending() {
+	access_session(function (response) {
+		
+		const API_request = new XMLHttpRequest()
+		API_request.open('GET', '/posts?trending=true');
+		API_request.setRequestHeader('Content-Type', 'application/json');
+
+		API_request.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				const response_content = JSON.parse(this.response);
+				const insertionElement = document.getElementById("trending-feed");
+				var postIDs = [];
+				insertionElement.innerHTML = "";
+				for (let i = response_content.length - 1; i >= 0; i--) {
+					postIDs.push(response_content[i].PostID);
+					
+					insertionElement.innerHTML += `
+					<div class="post-trending" data-post-id="${response_content[i].PostID}">
+						<b class="post-trending-title">Trending</b>
+						<b style="font-size: 16px;">${response_content[i].Name}</b>
+						<i class="gray-text" style="font-size: 12px;">${response_content[i].Content}</i>
+						<span class="gray-text">${response_content[0].Likes} Likes</span>
+					</div>
+					`
+				}
+				makeTrendingInteractive(postIDs);
+			}
+		}
+		API_request.send(null);
+	})
+}
+
 function postMain() {
 	$("#for-you-btn").click(function() {
 		$("#for-you-btn").addClass('center-button-selected');
@@ -308,13 +317,17 @@ function postMain() {
 	$("#p_form").submit(function(){
 		if (document.getElementById('p_display_container').innerHTML.length <= 0) {
 			var s_content = document.getElementById("make-post-content").value
-			makePost(s_content, retrieve_posts("post-feed"));
+			makePost(s_content);
 			document.getElementById("p_form").reset();
 		}
+		setTimeout(() => {
+				retrieve_posts("post-feed");
+		}, "2000");
 	});
 	
 	retrieve_user();
 	retrieve_posts("post-feed");
+	retrieve_trending();
 }
 
 postMain();

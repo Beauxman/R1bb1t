@@ -29,7 +29,7 @@ document.getElementById('p_form').addEventListener('submit', async (event) => {
 			const imageURL = data.url;
 			
 			var s_content = document.getElementById("make-post-content").value
-			makePost(s_content, retrieve_posts("post-feed"), imageURL);
+			makePost(s_content, imageURL);
 			document.getElementById('p_display_container').innerHTML = "";
 			document.getElementById("p_form").reset();
 			postHasFile = false;
@@ -70,7 +70,7 @@ function addPostViewFileListener(postID) {
 				const data = await response.json();
 				const imageURL = data.url;
 				var s_content = document.getElementById("make-post-content2").value
-				makePost(s_content, retrieve_posts("post-view-comments", postID), imageURL, postID);
+				makePost(s_content, imageURL, postID);
 				document.getElementById('p_display_container2').innerHTML = "";
 				document.getElementById("p_form2").reset();
 				postHasFile = false;

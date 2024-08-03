@@ -38,7 +38,8 @@ const con = mysql.createConnection({
 	host: db_host,
 	user: db_user,
 	password: db_password,
-	database: db_name
+	database: db_name,
+	queueLimit: 0
 });
 
 const appHTTP = express()
@@ -120,7 +121,7 @@ function fixInput(input, regex) {
 
 app.get('/sessions', (req, res)=>{
 	if (req.session.email != null) {
-		res.send(req.session.email);
+		res.send(null);
 	} else {
 		res.send('Invalid session');
 	}
@@ -140,6 +141,10 @@ app.get('/logout', (req, res) => {
 	res.status(200);
 	res.send();
 });
+
+app.get('/about',(req,res) => {
+	res.sendFile(path.join(__dirname, 'public_html/about.html'));
+})
 
 app.get('/home',(req,res) => {
 	if (req.session.email != null) {
@@ -167,7 +172,7 @@ app.post('/files', upload.single('file'), (req, res) => {
 
 //--------------------------------------------------------------- API CALLS ---------------------------------------------------------------//
 
-app.post('/api/accounts', function(req, res){
+app.post('/accounts', function(req, res){
 	var r_email = req.body.email;
 	var r_password = req.body.password;
 	var r_name = req.body.name;
@@ -203,7 +208,7 @@ app.post('/api/accounts', function(req, res){
 	})
 })
 
-app.post('/api/accounts/authenticate', function(req, res) {
+app.post('/accounts/authenticate', function(req, res) {
 	var l_email = req.body.email;
 	var l_password = req.body.password;
 	
@@ -220,24 +225,24 @@ app.post('/api/accounts/authenticate', function(req, res) {
 					return;
 				}				
 				if (h_result) {
-					console.log("Account authenticated (" + l_email + ").");
+					// Login success
 					res.status(200);
 					res.json(h_result);
 				} else {
-					console.log("Failed authentication attempt (" + l_email + "). Invalid password.");
+					// Invalid password
 					res.status(401);
 					res.json(h_result);
 				}
 			});
 		} else {
-			console.log("Failed authentication attempt (" + l_email + "). Invalid email.");
+			// Invalid email
 			res.status(401);
 			res.json(q_result);
 		}
 	})
 })
 
-app.post('/api/accounts/namecheck', function(req, res) {
+app.post('/accounts/namecheck', function(req, res) {
 	var t_handle = req.body.handle;
 
 	res.type('application/json');
@@ -255,8 +260,8 @@ app.post('/api/accounts/namecheck', function(req, res) {
 	})
 })
 
-app.post('/api/accounts/retrieve', function(req, res) {
-	var r_email = req.body.email;
+app.post('/accounts/retrieve', function(req, res) {
+	var r_email = req.session.email;
 	var r_userid = req.body.userid;
 	var sql = "";
 	var values = [];
@@ -291,8 +296,8 @@ app.post('/api/accounts/retrieve', function(req, res) {
 	})
 })
 
-app.post('/api/posts', function(req, res) {
-	var r_email = req.body.email;
+app.post('/posts', function(req, res) {
+	var r_email = req.session.email;
 	var r_content = req.body.content;
 	var r_parent = req.body.parentpostid
 	var r_imageurl = req.body.imageurl
@@ -317,11 +322,14 @@ app.post('/api/posts', function(req, res) {
 	})
 })
 
-app.get('/api/posts', function(req, res) {
+app.get('/posts', function(req, res) {
 	var r_parent = req.query.parentpostid;
 	var whereConstraint = "1=1";
+	var extraConstraits = "";
 	
-	if (!(req.query.userid === undefined || req.query.userid == "undefined")) {
+	if (req.query.trending == "true") {
+		extraConstraits = "ORDER BY Likes DESC LIMIT 3";
+	} else if (!(req.query.userid === undefined || req.query.userid == "undefined")) {
 		whereConstraint = "u.UserID = " + Number(req.query.userid);
 	} else if (req.query.postid) {
 		whereConstraint = "p.postID = " + Number(req.query.postid);
@@ -334,12 +342,12 @@ app.get('/api/posts', function(req, res) {
 	
 	res.type('application/json');
 	var sql = "SELECT UserID FROM users WHERE Email = ?";
-	var values = [req.query.currentuseremail];
+	var values = [req.session.email];
 	con.execute(sql, values, function (err, q_result) {
 		if (err) throw err;
 		if (q_result.length > 0) {
 			var sql = `
-				SELECT u.UserID, u.Name, u.Handle, u.ImageURL, p.PostID, p.Content, p.Created, p.Reposts, p.ImageURL AS PostImage,
+				SELECT u.UserID, u.Name, u.Handle, u.ImageURL, p.PostID, p.Content, p.Created, p.ImageURL AS PostImage,
 				COUNT(DISTINCT l.Created) AS Likes,
 				COUNT(DISTINCT c.PostID) AS Comments,
 				IF(ul.UserID IS NOT NULL, 1, 0) AS UserHasLiked,
@@ -351,7 +359,8 @@ app.get('/api/posts', function(req, res) {
 				LEFT JOIN Likes ul ON p.PostID = ul.PostID AND ul.UserID = ${q_result[0].UserID}
 				LEFT JOIN Posts uc ON p.PostID = uc.ParentPostID AND uc.UserID = ${q_result[0].UserID}
 				WHERE ${whereConstraint} 
-				GROUP BY p.PostID
+				GROUP BY p.PostID 
+				${extraConstraits};
 				`
 				//ORDER BY UserID DESC
 				//LIMIT 50;
@@ -364,8 +373,8 @@ app.get('/api/posts', function(req, res) {
 	})
 })
 
-app.post('/api/posts/likes', function(req, res) {
-	var r_email = req.body.email;
+app.post('/posts/likes', function(req, res) {
+	var r_email = req.session.email;
 	var r_postid = req.body.postid;
 
 	var sql = `
@@ -383,8 +392,8 @@ app.post('/api/posts/likes', function(req, res) {
 	})
 })
 
-app.delete('/api/posts/likes', function(req, res) {
-	var r_email = req.query.currentuseremail;
+app.delete('/posts/likes', function(req, res) {
+	var r_email = req.session.email;
 	var r_postid = req.query.postid;
 
 	var sql = `
@@ -401,8 +410,8 @@ app.delete('/api/posts/likes', function(req, res) {
 	})
 })
 
-app.post('/api/accounts/followers', function(req, res) {
-	var r_email = req.body.email;
+app.post('/accounts/followers', function(req, res) {
+	var r_email = req.session.email;
 	var r_followingid = req.body.followingid;
 
 	var sql = `
@@ -419,8 +428,8 @@ app.post('/api/accounts/followers', function(req, res) {
 	})
 })
 
-app.delete('/api/accounts/followers', function(req, res) {
-	var r_email = req.query.currentuseremail;
+app.delete('/accounts/followers', function(req, res) {
+	var r_email = req.session.email;
 	var r_followingid = req.query.followingid;
 
 	var sql = `

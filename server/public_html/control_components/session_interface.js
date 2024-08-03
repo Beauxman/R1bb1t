@@ -21,7 +21,7 @@ function access_session(on_success) {
 	session_request.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			if (this.response != 'Invalid session') {
-				on_success(this.response);
+				on_success();
 			}
 		} else {
 			return;

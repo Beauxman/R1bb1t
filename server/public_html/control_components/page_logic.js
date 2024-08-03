@@ -53,6 +53,23 @@ function showProfilePage(userID) {
 			}, "200");
 		})
 	}
+	$("#my-posts").click(function() {
+		$("#my-posts").addClass('profile-thread-selected');
+		$("#my-replies").removeClass('profile-thread-selected');
+		$("#my-media").removeClass('profile-thread-selected');
+	});
+	
+	$("#my-replies").click(function() {
+		$("#my-posts").removeClass('profile-thread-selected');
+		$("#my-replies").addClass('profile-thread-selected');
+		$("#my-media").removeClass('profile-thread-selected');
+	});
+	
+	$("#my-media").click(function() {
+		$("#my-posts").removeClass('profile-thread-selected');
+		$("#my-replies").removeClass('profile-thread-selected');
+		$("#my-media").addClass('profile-thread-selected');
+	});
 }
 
 function closeProfilePage() {
@@ -106,9 +123,23 @@ function popPageStack() {
 	pages.pop();
 }
 
+function makeTrendingInteractive(postIDs) {
+	for (let i = 0; i < postIDs.length; i++) {
+		function postViewer() {
+			showPostPage(postIDs[i]);
+			pushPageStack("post", postIDs[i])
+		}
+		
+		$('[data-post-id="' + postIDs[i] + '"]').click(function() {
+			if (!clicked_profile) {
+				postViewer();
+			}
+		})
+	}
+}
+
 function makePostsInteractive(postIDs) {
 	for (let i = 0; i < postIDs.length; i++) {
-		
 		function postViewer() {
 			showPostPage(postIDs[i]);
 			pushPageStack("post", postIDs[i])
@@ -214,6 +245,13 @@ $('#home-btn').click(function() {
 	retrieve_posts("post-feed");
 })
 
+$('#big-post-btn').click(function() {
+	closeProfilePage();
+	closePostPage();
+	pages = [];
+	retrieve_posts("post-feed");
+})
+
 $('#profile-btn').click(function() {
 	let profileID = document.getElementById('my-post-profile').getAttribute('data-user-id');
 	clicked_profile = true;
@@ -228,4 +266,19 @@ $('#logout-btn').click(function() {
 	end_session(function() {
 		window.location.replace("/");
 	})
+})
+
+var mobileMenuHidden = true;
+$('#mobile-menu-btn').click(function() {
+	if (mobileMenuHidden) $('.left-menu').show();
+	else $('.left-menu').hide();
+	mobileMenuHidden = !mobileMenuHidden;
+})
+
+$('#about-btn').click(function() {
+	window.location.replace("/about");
+})
+
+$('#support-btn').click(function() {
+	window.location.replace("/about#support");
 })

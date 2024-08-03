@@ -1,7 +1,18 @@
+a, a:hover {
+	color: inherit;
+	cursor: pointer;
+}
 
 input {
 	font-size: 18px !important;
 	color: #1a1a1a !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:active,
+input:-webkit-autofill:focus {
+    background-color: #ffffff !important;
 }
 
 input:focus, textarea:focus {
@@ -17,4 +28,8 @@ input::placeholder, textarea::placeholder {
 
 textarea::placeholder {
 	font-family: Sora, Arial, Verdana;
+}
+
+button:focus:not(:focus-visible) {
+ outline: none !important;
 }

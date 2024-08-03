@@ -4,8 +4,8 @@
 		<title>R1bb1t | Home</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="description" content="Connect with your friends and the whole world with this R1bb1t! This is a social media app for everyone. Make the leap!">
-		<meta name="keywords" content="r1bb1t, ribbit, social, social media, post, connect, friends, like, comment, share">
+		<meta name="description" content="R1bb1t social. Connect with your friends and the whole world. This is a social media app for everyone. Make the leap!">
+		<meta name="keywords" content="r1bb1t, ribbit, social, social media, post, connect, friends, like, comment, share, frog">
 		<meta name="author" content="Andrew Bowman">
 		<link rel="icon" type="image" href="client_art/favicon.ico">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -21,23 +21,26 @@
 		<div class="container-global">
 			<div class="row main-container">
 				<div class="container-fluid">
+					<div id="mobile-menu-btn">
+						<span>R1bb1t Menu</span><span class="glyphicon glyphicon-triangle-bottom mobile-menu-btn-icon"></span>
+					</div>
 					<div class="row">
 						<div class="col-sm-3" >
 							<div class="left-menu">
-								<div style="display: flex;"><h1 style="font-family: Sora;">R1bb1t</h1><img src="client_art/logo.png" id="logo" style="width: 32px; height: 32px; margin-left: 16px; margin-top: 20px;"></div>
+								<div style="display: flex;"><h1 style="font-family: Sora;">R1bb1t</h1><img src="client_art/logo.png" id="logo"></div>
 								<button type="button" class="btn left-btn" id="home-btn"><span class="glyphicon glyphicon-home"></span><span class="left-menu-text">Home</span></button>
 								<button type="button" class="btn left-btn" disabled><span class="glyphicon glyphicon-search"></span><span class="left-menu-text">Explore</span></button>
 								<button type="button" class="btn left-btn" disabled><span class="glyphicon glyphicon-bell"></span><span class="left-menu-text">Notifications</span></button>
 								<button type="button" class="btn left-btn" disabled><span class="glyphicon glyphicon-envelope"></span><span class="left-menu-text">Messages</span></button>
-								<button type="button" class="btn left-btn" disabled><span class="glyphicon glyphicon-cloud"></span><span class="left-menu-text">AI</span></button>
-								<button type="button" class="btn left-btn" disabled><span class="glyphicon glyphicon-list-alt"></span><span class="left-menu-text">Lists</span></button>
+								<button type="button" class="btn left-btn" disabled><span class="glyphicon glyphicon-cloud"></span><span class="left-menu-text">Archive</span></button>
+								<button type="button" class="btn left-btn" disabled><span class="glyphicon glyphicon-list-alt"></span><span class="left-menu-text">Theme</span></button>
 								<button type="button" class="btn left-btn" disabled><span class="glyphicon glyphicon-bookmark"></span><span class="left-menu-text">Bookmarks</span></button>
-								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-tree-deciduous"></span><span class="left-menu-text">Support</span></button>
-								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-star-empty"></span><span class="left-menu-text">Premium</span></button>
-								<button type="button" class="btn left-btn"><span class="glyphicon glyphicon-education"></span><span class="left-menu-text">About</span></button>
+								<button type="button" class="btn left-btn" id="support-btn"><span class="glyphicon glyphicon-tree-deciduous"></span><span class="left-menu-text">Support</span></button>
+								<button type="button" class="btn left-btn" disabled><span class="glyphicon glyphicon-star-empty"></span><span class="left-menu-text">Premium</span></button>
+								<button type="button" class="btn left-btn" id="about-btn"><span class="glyphicon glyphicon-education"></span><span class="left-menu-text">About</span></button>
 								<button type="button" class="btn left-btn" id="profile-btn"><span class="glyphicon glyphicon-user"></span><span class="left-menu-text">Profile</span></button>
 								<button type="button" class="btn left-btn" id="logout-btn"><span class="glyphicon glyphicon-option-horizontal"></span><span class="left-menu-text">Logout</span></button>
-								<button type="button" class="btn left-post-btn" style="padding-right: 0px; font-weight: bold;" id="test">Post</button>
+								<button type="button" class="btn left-post-btn" style="padding-right: 0px; font-weight: bold;" id="big-post-btn">Post</button>
 								<div class="post-profile" style="margin-top: 60px;" id="my-post-profile">
 									<img src="" id="my-profile-icon-1" style="width: 64px; height: 64px; object-fit: cover;">
 									<div class="right-profile left-profile-text">
@@ -68,26 +71,6 @@
 									<div class="reload-posts">
 									</div>
 									<div id="post-feed">
-										<!--<div class="post">
-											<div class="post-profile">
-												<img src="profile.jpg">
-												<b>Andrew</b>
-												<p>@beauxman - 5h</p>
-											</div>
-											<div class="post-body">
-												<img src="https://i.imgur.com/tGYqe93.jpeg" style="width: 100%; border-radius: 5%;">
-											</div>
-										</div>
-										<div class="post">
-											<div class="post-profile">
-												<img src="profile2.jpg">
-												<b>Gaby</b>
-												<p>@catblush - 2h</p>
-											</div>
-											<div class="post-body">
-												<img src="img1.jpg" style="width: 100%; border-radius: 5%;">
-											</div>
-										</div>-->
 									</div>
 								</div>
 								<div class="center-scroller" id="center-screen-2" style="display: none;">
@@ -125,9 +108,9 @@
 											</div>
 										</div>
 										<div id="profile-threads">
-											<button type="button" class="profile-thread profile-thread-selected"><b>Posts</b></button>
-											<button type="button" class="profile-thread"><b>Replies</b></button>
-											<button type="button" class="profile-thread"><b>Media</b></button>
+											<button type="button" class="profile-thread profile-thread-selected" id="my-posts"><b>Posts</b></button>
+											<button type="button" class="profile-thread" id="my-replies"><b>Replies</b></button>
+											<button type="button" class="profile-thread" id="my-media"><b>Media</b></button>
 										</div>
 										<div id="profile-post-feed">
 										</div>
@@ -148,7 +131,12 @@
 								<button type="button" class="btn follow-button">Subscribe</button>
 							</div>
 							<div class="right-highlights">
-								<h4>What's hopping</h4>
+								<div class="highlights-header">
+									<h4>What's hopping</h4>
+									<span class="gray-text">Today's trending posts</span>
+								</div>
+								<div id="trending-feed">
+								</div>
 							</div>
 							<div class="right-follows">
 								<h4>Who to follow</h4>

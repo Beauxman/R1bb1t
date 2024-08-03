@@ -166,8 +166,17 @@ $('#r_password, #r_password2').on('keyup', function () {
 	$('#password_err').html('Passwords do not match');
 });
 
+$('#guest-login-btn').click(function() {
+	guestLogin();
+})
+
 function registerManagerMain() {
 	checkFormInputs();
+	
+	$(".gray-background").css("height", document.body.scrollHeight); 
+	addEventListener('resize', (event) => {});
+	function sizecheck() { $(".gray-background").css("height", document.body.scrollHeight) };
+	onresize = (event) => {sizecheck()};
 }
 
 registerManagerMain()

@@ -13,7 +13,7 @@ $("#r_form").submit(function(){
 	var s_email = r_email;
 	
 	const API_request = new XMLHttpRequest()
-	API_request.open('POST', '/api/accounts')
+	API_request.open('POST', '/accounts')
 	API_request.setRequestHeader('Content-Type', 'application/json')
 	
 	const request_content = JSON.stringify({
@@ -40,7 +40,7 @@ $("#l_form").submit(function(){
 	var s_email = l_email;
 	
 	const API_request = new XMLHttpRequest()
-	API_request.open('POST', '/api/accounts/authenticate')
+	API_request.open('POST', '/accounts/authenticate')
 	API_request.setRequestHeader('Content-Type', 'application/json')
 	
 	const request_content = JSON.stringify({email: l_email, password: l_password});
@@ -56,12 +56,27 @@ $("#l_form").submit(function(){
 	API_request.send(request_content);
 });
 
+function guestLogin() {
+	const API_request = new XMLHttpRequest()
+	API_request.open('POST', '/accounts/authenticate')
+	API_request.setRequestHeader('Content-Type', 'application/json')
+	
+	const request_content = JSON.stringify({email: 'guest@gmail.com', password: 'guestaccess'});
+	
+	API_request.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {			
+			request_session('guest@gmail.com', redirect_home);
+		}
+	}
+	API_request.send(request_content);
+}
+
 $("#handle-check").click(function(){ 
 	let t_handle = document.getElementById("r_handle").value
 	
 	if (t_handle == "") return;
 	const API_request = new XMLHttpRequest()
-	API_request.open('POST', '/api/accounts/namecheck')
+	API_request.open('POST', '/accounts/namecheck')
 	API_request.setRequestHeader('Content-Type', 'application/json')
 
 	const request_content = JSON.stringify({handle: t_handle});
